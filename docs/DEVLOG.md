@@ -11,7 +11,15 @@ Today I started Project KOGANE, a personal AI companion inspired by Kogane from 
 - Created 'main.py' 
 - Ran my first Python script successfully
 - Set up the firt basic Kogane response
+- Created the KOGANE GitHub repository
+- Initialized Git locally
+- Made the first commit
+- Connected the local project to the GitHub remote repository
+- Pushed the project to GitHub successfully
 
 ### First working output
 '''text
 Kogane: Awaiting your command.
+
+### Milestone Completed
+v0.1.0 - Initialization
