@@ -61,49 +61,45 @@ def show_apps():
 startup_status()
 
 while True:
-    user_input = input(f"{user_name}: ")
+    user_input = input("Kevin: ")
     intent, data = detect_intent(user_input)
 
     if intent == "empty":
-        kogane_speak(f"{user_name}... you gotta type something.")
+        kogane_speak("You summoned silence, Kevin. Very mysterious.")
 
-    elif intent == "shutdown":
-        kogane_speak(f"Session terminated. Bye bye, {user_name}.")
+    elif intent == "greeting":
+        kogane_speak("I am present, Kevin. What do you require?")
+
+    elif intent == "exit":
+        kogane_speak("Session terminated. Goodbye, Kevin.")
         break
 
-    elif intent == "set_mode_introvert":
-        change_mode("introvert")
-
-    elif intent == "set_mode_extrovert":
-        change_mode("extrovert")
-
-    elif intent == "set_mode_watcher":
-        change_mode("watcher")
+    elif intent == "help":
+        show_help()
 
     elif intent == "status":
+        show_status()
+
+    elif intent == "mode":
         show_status()
 
     elif intent == "modes":
         show_modes()
 
-    elif intent == "mode":
-        kogane_speak(f"Current mode is {get_mode_name(current_mode)}.")
+    elif intent == "set_mode":
+        change_mode(data)
+
+    elif intent == "show_apps":
+        show_apps()
+
+    elif intent == "missing_app":
+        kogane_speak("You said open, but did not name an app, Kevin.")
+        kogane_speak("Try something like: open chrome, open spotify, or open fl studio.")
 
     elif intent == "open_app":
         success, message = open_app(data)
         kogane_speak(message)
 
-    elif intent == "help":
-        show_help()
-
-    elif intent == "greeting":
-        kogane_speak(f"Heyo! {user_name}, how can I assist you today?")
-
-    elif intent == "summon":
-        kogane_speak(f"I am present, {user_name}.")
-
-    elif intent == "apps":
-        show_apps()
-
-    else:
-        kogane_speak("I'm sorry. I didn't understand that command. Type 'help' for a list of commands.")
+    elif intent == "unknown":
+        kogane_speak(f"I do not understand '{data}' yet, Kevin.")
+        kogane_speak("Type 'help' to see what I can currently do.")

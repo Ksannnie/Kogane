@@ -1,45 +1,39 @@
 def detect_intent(user_input):
-    text = user_input.strip().lower()
-    words = set(text.split())
+    command = user_input.lower().strip()
 
-    if text == "":
+    if command == "":
         return "empty", None
 
-    if any(word in words for word in ["exit", "quit", "bye", "shutdown"]):
-        return "shutdown", None
-
-    if "set mode introvert" in text:
-        return "set_mode", "introvert"
-
-    if "set mode extrovert" in text:
-        return "set_mode", "extrovert"
-
-    if "set mode watcher" in text:
-        return "set_mode", "watcher"
-
-    if text.startswith("open "):
-        app_name = text.replace("open ", "", 1).strip()
-        return "open_app", app_name
-
-    if "status" in words:
-        return "status", None
-
-    if "modes" in words:
-        return "modes", None
-
-    if "mode" in words:
-        return "mode", None
+    if command in ["bye", "exit", "quit", "stop"]:
+        return "exit", None
     
-    if "apps" in words:
-        return "apps", None
+    if command in ["hello", "hi", "hey", "yo", "sup", "what's up"]:
+       return "greeting", None
 
-    if "help" in words:
+    if command in ["help", "commands", "what can you do"]:
         return "help", None
 
-    if any(word in words for word in ["hello", "hi", "hey", "yo"]):
-        return "greeting", None
+    if command in ["status", "current status"]:
+        return "status", None
 
-    if "kogane" in words:
-        return "summon", None
+    if command in ["mode", "current mode"]:
+        return "mode", None
 
-    return "unknown", None
+    if command in ["modes", "show modes", "list modes"]:
+        return "modes", None
+
+    if command in ["apps", "show apps", "list apps", "what can you open"]:
+        return "show_apps", None
+
+    if command.startswith("set mode "):
+        mode_name = command.replace("set mode ", "").strip()
+        return "set_mode", mode_name
+
+    if command == "open":
+        return "missing_app", None
+
+    if command.startswith("open "):
+        app_name = command.replace("open ", "").strip()
+        return "open_app", app_name
+
+    return "unknown", user_input
