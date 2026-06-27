@@ -24,72 +24,89 @@ Kogane: Awaiting your command.
 ### Milestone Completed
 v0.1.0 - Initialization
 
-## Day 2 - Text Command System Started
+## Day 2 - Text Command System Completed
 
-Today I continued building KOGANE past the initial setup stage and started turning it into an actual command-based assistant.
-Main Progress
+Today I finished the main work for **v0.2.0 - Text Command System**.
 
-KOGANE now has the beginning of a modular software structure instead of everything being stored inside one file.
+KOGANE is now able to run as a terminal-based assistant that accepts typed commands, responds with personality, switches modes, lists available apps, and opens applications on macOS.
 
-New Folders and Files Added
-brain/
-├── __init__.py
-└── intent.py
+### Completed Today
 
-personality/
-├── __init__.py
-└── modes.py
+* Improved the text command loop
+* Added cleaner unknown command handling
+* Added a greeting intent for commands like `hello`, `hi`, and `yo`
+* Added an app list command
+* Fixed the app launcher system
+* Separated Roblox and Roblox Studio commands
+* Fixed FL Studio by matching the correct macOS app name: `FL Studio 2025`
+* Confirmed that major app-opening commands work
+* Updated KOGANE's command system to feel more polished
 
-skills/
-├── __init__.py
-└── app_launcher.py
-What Each File Does
+### Commands Tested
 
-brain/intent.py
-Handles command detection. This file helps KOGANE understand what the user is trying to do, such as asking for help, checking status, changing modes, or opening an app.
-
-personality/modes.py
-Stores KOGANE's personality modes. The current modes include introvert, extrovert, and watcher.
-
-skills/app_launcher.py
-Handles opening applications on macOS. This gives KOGANE the ability to launch apps based on typed commands.
-
-main.py
-Acts as the main control center. It starts KOGANE, takes user input, sends commands to the intent system, and runs the correct response or skill.
-
-Commands Added / Tested
+```text
+hello
 help
-status
+apps
+open
+open chrome
+open spotify
+open roblox
+open roblox studio
+open fl
+open fl studio
 mode
 modes
 set mode introvert
 set mode extrovert
 set mode watcher
+bye
+```
+
+### Working App Commands
+
+```text
 open chrome
 open spotify
-open vscode
-open fl studio
 open roblox
-bye
-App Launcher Progress
+open roblox studio
+open fl
+open fl studio
+```
 
-KOGANE can now recognize app-opening commands such as:
+### Important Fixes
 
-open chrome
+The app launcher was updated so that KOGANE can return both a success value and a message.
 
-and respond with:
+This fixed the earlier `ValueError` caused by `main.py` expecting two return values from `open_app()`.
 
-Kogane: Opening Google Chrome.
+KOGANE now uses app aliases so that different user commands can open the correct macOS application.
 
-This is the first real “skill” added to the project.
+For example:
 
-Current Milestone
+```text
+roblox = Roblox
+roblox studio = RobloxStudio
+fl studio = FL Studio 2025
+```
 
-v0.2.0 - Text Command System is now in progress.
+### What I Learned
 
-Next Goals
-Clean up the command system
-Add better responses for unknown commands
-Improve mode switching
-Add more app shortcuts
-Commit and push the updated text command system to GitHub
+* How to debug Python import errors
+* How to fix return value mismatches
+* How to separate similar commands like Roblox and Roblox Studio
+* How macOS application names need to match exactly when using Python to open apps
+* How command aliases make an assistant easier to use
+* How to make unknown commands respond cleanly instead of feeling broken
+
+### Milestone Completed
+
+**v0.2.0 - Text Command System** is now complete.
+
+### Next Milestone
+
+The next milestone is:
+
+**v0.3.0 - Memory**
+
+The goal will be to let KOGANE save and load useful information instead of forgetting everything when the program closes.
