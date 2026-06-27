@@ -7,7 +7,13 @@ from personality.modes import (
     get_mode_name,
     is_valid_mode,
 )
-
+from personality.responses import (
+    get_greeting,
+    get_farewell,
+    get_empty_response,
+    get_unknown_response,
+    get_question_response,
+)
 
 assistant_name = "Kogane"
 user_name = "Kevin"
@@ -83,14 +89,14 @@ while True:
     intent, data = detect_intent(user_input)
 
     if intent == "empty":
-        kogane_speak("You summoned silence, Kevin. Very mysterious.")
+       kogane_speak(get_empty_response(user_name))
 
     elif intent == "greeting":
-        kogane_speak("I am present, Kevin. What do you require?")
+        kogane_speak(get_greeting(current_mode, user_name))
 
     elif intent == "exit":
-        kogane_speak("Session terminated. Goodbye, Kevin.")
-        break
+       kogane_speak(get_farewell(current_mode, user_name))
+       break
 
     elif intent == "help":
         show_help()
@@ -128,8 +134,8 @@ while True:
     elif intent == "recall_memory":
         show_memory()
 
-
+    elif intent == "question":
+        kogane_speak(get_question_response(user_name))
 
     elif intent == "unknown":
-        kogane_speak(f"I do not understand '{data}' yet, Kevin.")
-        kogane_speak("Type 'help' to see what I can currently do.")
+        kogane_speak(get_unknown_response(data, user_name))

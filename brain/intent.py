@@ -49,5 +49,8 @@ def detect_intent(user_input):
 
     if command in ["memory", "recall", "show memory", "what do you remember"]:
         return "recall_memory", None
-
+    
+    if command.endswith("?"):
+        return "question", user_input
+    
     return "unknown", user_input
