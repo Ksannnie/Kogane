@@ -1,5 +1,6 @@
 from brain.intent import detect_intent
 from skills.app_launcher import get_available_apps, open_app
+from memory.memory_store import remember_fact, get_facts
 from personality.modes import (
     get_activation_message,
     get_all_modes,
@@ -57,6 +58,23 @@ def show_apps():
     for app_key in get_available_apps():
         kogane_speak(f"- {app_key}")
 
+def remember_memory(memory_text):
+    remember_fact(memory_text)
+    kogane_speak(f"I will remember that, Kevin.")
+
+
+def show_memory():
+    facts = get_facts()
+
+    if not facts:
+        kogane_speak("I do not have any saved memories yet, Kevin.")
+        return
+
+    kogane_speak("Here is what I remember, Kevin:")
+
+    for index, fact in enumerate(facts, start=1):
+        kogane_speak(f"{index}. {fact['text']}")
+
 
 startup_status()
 
@@ -99,6 +117,18 @@ while True:
     elif intent == "open_app":
         success, message = open_app(data)
         kogane_speak(message)
+
+    elif intent == "missing_memory":
+        kogane_speak("You told me to remember, but did not give me anything to store, Kevin.")
+        kogane_speak("Try: remember that I am building KOGANE.")
+        
+    elif intent == "remember":
+        remember_memory(data)
+        
+    elif intent == "recall_memory":
+        show_memory()
+
+
 
     elif intent == "unknown":
         kogane_speak(f"I do not understand '{data}' yet, Kevin.")

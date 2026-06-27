@@ -36,4 +36,18 @@ def detect_intent(user_input):
         app_name = command.replace("open ", "").strip()
         return "open_app", app_name
 
+    if command == "remember":
+        return "missing_memory", None
+
+    if command.startswith("remember that "):
+        memory_text = command.replace("remember that ", "", 1).strip()
+        return "remember", memory_text
+
+    if command.startswith("remember "):
+        memory_text = command.replace("remember ", "", 1).strip()
+        return "remember", memory_text
+
+    if command in ["memory", "recall", "show memory", "what do you remember"]:
+        return "recall_memory", None
+
     return "unknown", user_input
