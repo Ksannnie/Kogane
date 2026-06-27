@@ -1,4 +1,5 @@
 from brain.intent import detect_intent
+from skills.app_launcher import get_available_apps, open_app
 from personality.modes import (
     get_activation_message,
     get_all_modes,
@@ -16,15 +17,20 @@ def kogane_speak(message):
     print(f"{assistant_name}: {message}")
 
 
-def show_status():
+def startup_status():
     kogane_speak(f"Awaiting your command, {user_name}.")
+    kogane_speak(f"Current mode is {get_mode_name(current_mode)}.")
+
+
+def show_status():
     kogane_speak(f"Current mode is {get_mode_name(current_mode)}.")
 
 
 def show_help():
     kogane_speak(
         "Available commands: hello, status, mode, modes, "
-        "set mode introvert, set mode extrovert, set mode watcher, help, bye."
+        "set mode introvert, set mode extrovert, set mode watcher, "
+        "open chrome, open spotify, open vscode, open fl studio, help, bye."
     )
 
 
@@ -45,11 +51,18 @@ def change_mode(new_mode):
         kogane_speak("Unknown mode. Available modes are: introvert, extrovert, watcher.")
 
 
-show_status()
+def show_apps():
+    kogane_speak("Apps I can open:")
+
+    for app_key in get_available_apps():
+        kogane_speak(f"- {app_key}")
+
+
+startup_status()
 
 while True:
     user_input = input(f"{user_name}: ")
-    intent = detect_intent(user_input)
+    intent, data = detect_intent(user_input)
 
     if intent == "empty":
         kogane_speak(f"{user_name}... you gotta type something.")
@@ -76,6 +89,10 @@ while True:
     elif intent == "mode":
         kogane_speak(f"Current mode is {get_mode_name(current_mode)}.")
 
+    elif intent == "open_app":
+        success, message = open_app(data)
+        kogane_speak(message)
+
     elif intent == "help":
         show_help()
 
@@ -84,6 +101,9 @@ while True:
 
     elif intent == "summon":
         kogane_speak(f"I am present, {user_name}.")
+
+    elif intent == "apps":
+        show_apps()
 
     else:
         kogane_speak("I'm sorry. I didn't understand that command. Type 'help' for a list of commands.")
