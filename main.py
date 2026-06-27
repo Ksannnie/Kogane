@@ -1,6 +1,14 @@
+from personality.modes import (
+    get_activation_message,
+    get_all_modes,
+    get_mode_name,
+    is_valid_mode,
+)
+
+
 assistant_name = "Kogane"
 user_name = "Kevin"
-mode = "Introvert Mode"
+current_mode = "introvert"
 
 
 def kogane_speak(message):
@@ -9,7 +17,7 @@ def kogane_speak(message):
 
 def show_status():
     kogane_speak(f"Awaiting your command, {user_name}.")
-    kogane_speak(f"Current mode is {mode}.")
+    kogane_speak(f"Current mode is {get_mode_name(current_mode)}.")
 
 
 def show_help():
@@ -21,26 +29,17 @@ def show_help():
 
 def show_modes():
     kogane_speak("Available modes:")
-    kogane_speak("Introvert Mode - I only speak when called upon.")
-    kogane_speak("Extrovert Mode - I may speak proactively, but I wont talk your head off.")
-    kogane_speak("Watcher Mode - I observe through vision features once they exist.")
+
+    for mode_key, mode_info in get_all_modes().items():
+        kogane_speak(f"{mode_info['name']} - {mode_info['description']}")
 
 
 def change_mode(new_mode):
-    global mode
+    global current_mode
 
-    if new_mode == "introvert":
-        mode = "Introvert Mode"
-        kogane_speak(f"Introvert Mode activated. I shall remain quiet until summoned, {user_name}.")
-
-    elif new_mode == "extrovert":
-        mode = "Extrovert Mode"
-        kogane_speak("Extrovert Mode activated. I may speak freely... within reason, of course.")
-
-    elif new_mode == "watcher":
-        mode = "Watcher Mode"
-        kogane_speak("Watcher Mode activated. I shall observe... respectfully, of course.")
-
+    if is_valid_mode(new_mode):
+        current_mode = new_mode
+        kogane_speak(get_activation_message(new_mode, user_name))
     else:
         kogane_speak("Unknown mode. Available modes are: introvert, extrovert, watcher.")
 
@@ -74,7 +73,7 @@ while True:
         show_modes()
 
     elif "mode" in words:
-        kogane_speak(f"Current mode is {mode}.")
+        kogane_speak(f"Current mode is {get_mode_name(current_mode)}.")
 
     elif "help" in words:
         show_help()

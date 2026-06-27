@@ -20,10 +20,10 @@ Example:
 
 ## Proactive Speaking Modes
 
-### Silent Mode 
-KOGANE only speaks when directly asked.
+### Introvert Mode 
+KOGANE only speaks when directly asked. This is the quiet/default mode
 
-### Balanced Mode 
+### Extrovert Mode 
 KOGANE may occasionally speak if something useful happens, but avoid interrupting too often.
 
 ### Watcher Mode 
