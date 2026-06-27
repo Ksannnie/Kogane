@@ -1,3 +1,4 @@
+from brain.intent import detect_intent
 from personality.modes import (
     get_activation_message,
     get_all_modes,
@@ -47,41 +48,41 @@ def change_mode(new_mode):
 show_status()
 
 while True:
-    user_input = input(f"{user_name}: ").strip().lower()
-    words = user_input.split()
+    user_input = input(f"{user_name}: ")
+    intent = detect_intent(user_input)
 
-    if user_input == "":
+    if intent == "empty":
         kogane_speak(f"{user_name}... you gotta type something.")
 
-    elif any(word in words for word in ["exit", "quit", "bye", "shutdown"]):
+    elif intent == "shutdown":
         kogane_speak(f"Session terminated. Bye bye, {user_name}.")
         break
 
-    elif "set mode introvert" in user_input:
+    elif intent == "set_mode_introvert":
         change_mode("introvert")
 
-    elif "set mode extrovert" in user_input:
+    elif intent == "set_mode_extrovert":
         change_mode("extrovert")
 
-    elif "set mode watcher" in user_input:
+    elif intent == "set_mode_watcher":
         change_mode("watcher")
 
-    elif "status" in words:
+    elif intent == "status":
         show_status()
 
-    elif "modes" in words:
+    elif intent == "modes":
         show_modes()
 
-    elif "mode" in words:
+    elif intent == "mode":
         kogane_speak(f"Current mode is {get_mode_name(current_mode)}.")
 
-    elif "help" in words:
+    elif intent == "help":
         show_help()
 
-    elif any(word in words for word in ["hello", "hi", "hey", "yo"]):
+    elif intent == "greeting":
         kogane_speak(f"Heyo! {user_name}, how can I assist you today?")
 
-    elif "kogane" in words:
+    elif intent == "summon":
         kogane_speak(f"I am present, {user_name}.")
 
     else:
