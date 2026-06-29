@@ -52,5 +52,15 @@ def detect_intent(user_input):
     
     if command.endswith("?"):
         return "question", user_input
-    
+
+    if command.startswith("delete memory "):
+        memory_number = command.replace("delete memory ", "", 1).strip()
+        return "delete_memory", memory_number
+
+    if command in ["clear memory", "clear memories", "forget everything"]:
+        return "clear_memory", None    
+
+
+
+
     return "unknown", user_input

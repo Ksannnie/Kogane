@@ -1,6 +1,11 @@
 from brain.intent import detect_intent
 from skills.app_launcher import get_available_apps, open_app
-from memory.memory_store import remember_fact, get_facts
+from memory.memory_store import (
+    remember_fact,
+    get_facts,
+    delete_fact,
+    clear_all_memories as clear_memory_store,
+)
 from personality.modes import (
     get_activation_message,
     get_all_modes,
@@ -65,21 +70,31 @@ def show_apps():
         kogane_speak(f"- {app_key}")
 
 def remember_memory(memory_text):
-    remember_fact(memory_text)
-    kogane_speak(f"I will remember that, Kevin.")
+    success, message = remember_fact(memory_text)
+    kogane_speak(message)
 
 
 def show_memory():
     facts = get_facts()
 
     if not facts:
-        kogane_speak("I do not have any saved memories yet, Kevin.")
+        kogane_speak("I do not have any saved memories yet.")
         return
 
-    kogane_speak("Here is what I remember, Kevin:")
+    kogane_speak("Here’s what I remember.")
 
     for index, fact in enumerate(facts, start=1):
         kogane_speak(f"{index}. {fact['text']}")
+
+
+def delete_memory(memory_number):
+    success, message = delete_fact(memory_number)
+    kogane_speak(message)
+
+
+def clear_memory():
+    success, message = clear_memory_store()
+    kogane_speak(message)
 
 
 startup_status()
@@ -133,6 +148,13 @@ while True:
         
     elif intent == "recall_memory":
         show_memory()
+  
+    elif intent == "delete_memory":
+        delete_memory(data)
+
+    elif intent == "clear_memory":
+        clear_memory()
+    
 
     elif intent == "question":
         kogane_speak(get_question_response(user_name))
