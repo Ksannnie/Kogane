@@ -56,12 +56,12 @@ In progress:
 * [x] Add a command to save information
 * [x] Add a command to recall saved information
 * [x] Confirm memory persists after restarting
-* [ ] Clean up memory formatting
-* [ ] Add better memory recall commands
-* [ ] Add a way to delete specific memories
-* [ ] Add a way to clear all memories
-* [ ] Prevent duplicate memories
-* [ ] Keep private memory files out of GitHub
+- [x] Clean up memory formatting
+- [x] Add better memory recall commands
+- [x] Add a way to delete specific memories
+- [x] Add a way to clear all memories
+- [x] Prevent duplicate memories
+- [x] Keep private memory files out of GitHub
 
 ---
 

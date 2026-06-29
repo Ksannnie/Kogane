@@ -150,7 +150,7 @@ while True:
         kogane_speak(message)
 
     elif intent == "missing_memory":
-        kogane_speak("You told me to remember, but did not give me anything to store, Kevin.")
+        kogane_speak("You told me to remember, but did not give me anything to store.")
         kogane_speak("Try: remember that I am building KOGANE.")
         
     elif intent == "remember":
