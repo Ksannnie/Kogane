@@ -96,6 +96,16 @@ def clear_memory():
     success, message = clear_memory_store()
     kogane_speak(message)
 
+def show_memory_count():
+    facts = get_facts()
+    count = len(facts)
+
+    if count == 0:
+        kogane_speak("I do not have any saved memories yet.")
+    elif count == 1:
+        kogane_speak("I currently have 1 saved memory.")
+    else:
+        kogane_speak(f"I currently have {count} saved memories.")
 
 startup_status()
 
@@ -149,13 +159,19 @@ while True:
     elif intent == "recall_memory":
         show_memory()
   
+    elif intent == "memory_count":
+        show_memory_count()
+
+    elif intent == "missing_delete_memory":
+        kogane_speak("Tell me which memory to delete.")
+        kogane_speak("Try: delete memory 1")
+
     elif intent == "delete_memory":
         delete_memory(data)
 
     elif intent == "clear_memory":
         clear_memory()
     
-
     elif intent == "question":
         kogane_speak(get_question_response(user_name))
 

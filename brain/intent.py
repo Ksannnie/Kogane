@@ -47,14 +47,21 @@ def detect_intent(user_input):
         memory_text = command.replace("remember ", "", 1).strip()
         return "remember", memory_text
 
-    if command in ["memory", "recall", "show memory", "what do you remember"]:
+    if command in ["memory", "recall", "show memory", "show memories", "what do you remember"]:
         return "recall_memory", None
-    
-    if command.endswith("?"):
-        return "question", user_input
+
+    if command in ["memory count", "how many memories", "how many memories do you have"]:
+        return "memory_count", None
+
+    if command in ["delete memory", "forget memory"]:
+        return "missing_delete_memory", None
 
     if command.startswith("delete memory "):
         memory_number = command.replace("delete memory ", "", 1).strip()
+        return "delete_memory", memory_number
+
+    if command.startswith("forget memory "):
+        memory_number = command.replace("forget memory ", "", 1).strip()
         return "delete_memory", memory_number
 
     if command in ["clear memory", "clear memories", "forget everything"]:
