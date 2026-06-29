@@ -67,7 +67,32 @@ def detect_intent(user_input):
     if command in ["clear memory", "clear memories", "forget everything"]:
         return "clear_memory", None    
 
+    question_starters = [
+    "what",
+    "why",
+    "how",
+    "when",
+    "where",
+    "who",
+    "can",
+    "could",
+    "should",
+    "would",
+    "is",
+    "are",
+    "do",
+    "does",
+    "did",
+    "explain",
+    "tell me",
+]
 
+    if command.endswith("?"):
+        return "question", user_input
+
+    for starter in question_starters:
+        if command.startswith(starter + " ") or command == starter:
+            return "question", user_input
 
 
     return "unknown", user_input

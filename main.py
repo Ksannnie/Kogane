@@ -1,5 +1,6 @@
 from brain.intent import detect_intent
 from skills.app_launcher import get_available_apps, open_app
+from brain.ai_brain import answer_question
 from memory.memory_store import (
     remember_fact,
     get_facts,
@@ -173,7 +174,9 @@ while True:
         clear_memory()
     
     elif intent == "question":
-        kogane_speak(get_question_response(user_name))
+        memories = get_facts()
+        response = answer_question(data, user_name, current_mode, memories)
+        kogane_speak(response)
 
     elif intent == "unknown":
         kogane_speak(get_unknown_response(data, user_name))
