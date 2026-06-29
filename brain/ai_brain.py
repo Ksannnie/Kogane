@@ -51,7 +51,8 @@ def clean_response(response_text, current_mode):
     if current_mode == "introvert":
         cleaned = re.sub(r"^(Heyo|Heye)[,!.\s]+", "", cleaned, flags=re.IGNORECASE)
         cleaned = re.sub(r"\b(Heyo|Heye)\b[,!.\s]*", "", cleaned, flags=re.IGNORECASE)
-
+        cleaned = re.sub(r"\s*Does that make sense\??\s*$", "", cleaned, flags=re.IGNORECASE)
+        
     return cleaned.strip()
 
 
@@ -102,6 +103,9 @@ Rules:
 - If you do not know something, be honest.
 - Never pretend to have abilities you do not have.
 - Keep the KOGANE tone without making every sentence sound like a catchphrase.
+- Do not end answers with "Does that make sense?"
+- Do not ask follow-up questions unless Kevin clearly needs one.
+- End answers cleanly.
 """
 
     try:
