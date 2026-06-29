@@ -73,8 +73,8 @@ In progress:
 - [x] Connect KOGANE to an AI model
 - [x] Send user questions to the AI brain
 - [x] Return AI-generated answers
-- [ ] Apply KOGANE's personality tone to AI responses
-- [ ] Use memory context in AI answers
+- [x] Apply KOGANE's personality tone to AI responses
+- [x] Use memory context in AI answers
 - [ ] Add a fallback when the AI brain is unavailable
 
 ---
