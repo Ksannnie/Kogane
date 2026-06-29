@@ -69,6 +69,8 @@ def detect_intent(user_input):
 
     question_starters = [
     "what",
+    "what's",
+    "whats",
     "why",
     "how",
     "when",
@@ -85,6 +87,7 @@ def detect_intent(user_input):
     "did",
     "explain",
     "tell me",
+    "teach me",
 ]
 
     if command.endswith("?"):

@@ -48,7 +48,7 @@ In progress:
 
 ---
 
-## v0.3.0 - Memory 🚧
+## v0.3.0 - Memory ✅
 
 * [x] Create a memory file
 * [x] Save user memories
@@ -65,16 +65,17 @@ In progress:
 
 ---
 
-## v0.4.0 - AI Brain
+## v0.4.0 - AI Brain 🚧
 
-* [ ] Create `brain/ai_brain.py`
-* [ ] Detect open-ended questions
-* [ ] Connect KOGANE to an AI model
-* [ ] Send user questions to the AI brain
-* [ ] Return AI-generated answers
-* [ ] Apply KOGANE's personality tone to AI responses
-* [ ] Use memory context in AI answers
-* [ ] Add a fallback when the AI brain is unavailable
+- [x] Create `brain/ai_brain.py`
+- [x] Detect open-ended questions
+- [x] Route open-ended questions to the AI brain file
+- [x] Connect KOGANE to an AI model
+- [x] Send user questions to the AI brain
+- [x] Return AI-generated answers
+- [ ] Apply KOGANE's personality tone to AI responses
+- [ ] Use memory context in AI answers
+- [ ] Add a fallback when the AI brain is unavailable
 
 ---
 
