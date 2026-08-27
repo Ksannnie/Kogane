@@ -10,7 +10,16 @@ def detect_intent(user_input):
     if command in ["hello", "hi", "hey", "yo", "sup", "what's up"]:
        return "greeting", None
 
-    if command in ["help", "commands", "what can you do"]:
+    if command in [
+        "help",
+        "commands",
+        "what can you do",
+        "what can you do?",
+        "what can you respond to",
+        "what can you respond to?",
+        "abilities",
+        "show commands",
+    ]:
         return "help", None
 
     if command in ["status", "current status"]:

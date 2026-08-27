@@ -40,11 +40,39 @@ def show_status():
 
 
 def show_help():
-    kogane_speak(
-        "Available commands: hello, status, mode, modes, "
-        "set mode introvert, set mode extrovert, set mode watcher, "
-        "open chrome, open spotify, open vscode, open fl studio, help, bye."
-    )
+    kogane_speak("Here is what I can do right now.")
+
+    kogane_speak("Chat:")
+    kogane_speak("- Ask me questions normally")
+    kogane_speak("- Example: what is an API?")
+    kogane_speak("- Example: explain python imports")
+
+    kogane_speak("Apps:")
+    kogane_speak("- open chrome")
+    kogane_speak("- open spotify")
+    kogane_speak("- open fl studio")
+    kogane_speak("- open roblox")
+    kogane_speak("- open roblox studio")
+    kogane_speak("- You can also say things like: can you open chrome")
+
+    kogane_speak("Memory:")
+    kogane_speak("- remember that ...")
+    kogane_speak("- memory")
+    kogane_speak("- memory count")
+    kogane_speak("- delete memory 1")
+    kogane_speak("- clear memory")
+
+    kogane_speak("Modes:")
+    kogane_speak("- mode")
+    kogane_speak("- modes")
+    kogane_speak("- set mode introvert")
+    kogane_speak("- set mode extrovert")
+    kogane_speak("- set mode watcher")
+
+    kogane_speak("Other:")
+    kogane_speak("- hello")
+    kogane_speak("- status")
+    kogane_speak("- bye")
 
 
 def show_modes():
