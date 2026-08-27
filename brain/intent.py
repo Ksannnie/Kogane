@@ -34,6 +34,12 @@ def detect_intent(user_input):
 
     if command.startswith("open "):
         app_name = command.replace("open ", "").strip()
+
+        filler_words = ["my ", "the ", "a ", "an "]
+
+        for filler in filler_words:
+            if app_name.startswith(filler):
+                app_name = app_name.replace(filler, "", 1).strip()
         return "open_app", app_name
 
     if command == "remember":
@@ -67,6 +73,43 @@ def detect_intent(user_input):
     if command in ["clear memory", "clear memories", "forget everything"]:
         return "clear_memory", None    
 
+     # Natural app-opening requests
+    # Examples:
+    # "can you open chrome"
+    # "okay so open roblox studio"
+    # "how bout you open my google chrome then"
+    # "pull up spotify"
+
+    open_request_words = ["open", "launch", "start", "pull up"]
+
+    known_app_phrases = {
+        "google chrome": "chrome",
+        "chrome": "chrome",
+        "spotify": "spotify",
+        "fl studio": "fl studio",
+        "fl": "fl studio",
+        "roblox studio": "roblox studio",
+        "rblx studio": "roblox studio",
+        "rbx studio": "roblox studio",
+        "roblox": "roblox",
+        "rblx": "roblox",
+        "rbx": "roblox",
+        "vs code": "vscode",
+        "vscode": "vscode",
+        "visual studio code": "vscode",
+    }
+
+    padded_command = f" {command} "
+
+    if any(f" {word} " in padded_command for word in open_request_words):
+        for app_phrase, app_key in sorted(
+            known_app_phrases.items(),
+            key=lambda item: len(item[0]),
+            reverse=True
+        ):
+            if f" {app_phrase} " in padded_command:
+                return "open_app", app_key
+
     question_starters = [
     "what",
     "what's",
@@ -97,5 +140,9 @@ def detect_intent(user_input):
         if command.startswith(starter + " ") or command == starter:
             return "question", user_input
 
-
+# General conversation fallback
+# If I type a normal sentence, send it to the AI brain.
+    if len(command.split()) >= 2:
+     return "question", user_input
+    
     return "unknown", user_input
