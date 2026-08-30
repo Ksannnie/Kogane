@@ -52,6 +52,75 @@ def detect_intent(user_input):
     if command in ["apps", "show apps", "list apps", "what can you open"]:
         return "show_apps", None
 
+    if command in ["websites", "show websites", "list websites"]:
+        return "show_websites", None
+
+    open_request_words = ["open", "launch", "start", "pull up"]
+    padded_command = f" {command} "
+
+    known_website_phrases = {
+        "youtube": "youtube",
+        "yt": "yt",
+        "github": "github",
+        "git hub": "git hub",
+        "chatgpt": "chatgpt",
+        "chat gpt": "chat gpt",
+        "google": "google",
+        "canvas": "canvas",
+        "odu canvas": "odu canvas",
+        "odu": "odu",
+    }
+
+    known_app_phrases = {
+        "google chrome": "chrome",
+        "chrome": "chrome",
+        "spotify": "spotify",
+        "fl studio": "fl studio",
+        "fl": "fl studio",
+        "roblox studio": "roblox studio",
+        "rblx studio": "roblox studio",
+        "rbx studio": "roblox studio",
+        "roblox": "roblox",
+        "rblx": "roblox",
+        "rbx": "roblox",
+        "vs code": "vscode",
+        "vscode": "vscode",
+        "visual studio code": "vscode",
+    }
+
+    if command == "open":
+        return "missing_app", None
+
+    if any(f" {word} " in padded_command for word in open_request_words):
+        # Check websites first so "open youtube" does not get treated like an app.
+        for website_phrase, website_key in sorted(
+            known_website_phrases.items(),
+            key=lambda item: len(item[0]),
+            reverse=True
+        ):
+            if f" {website_phrase} " in padded_command:
+                return "open_website", website_key
+
+        # Then check apps.
+        for app_phrase, app_key in sorted(
+            known_app_phrases.items(),
+            key=lambda item: len(item[0]),
+            reverse=True
+        ):
+            if f" {app_phrase} " in padded_command:
+                return "open_app", app_key
+
+    if command.startswith("open "):
+        target_name = command.replace("open ", "", 1).strip()
+
+        filler_words = ["my ", "the ", "a ", "an "]
+
+        for filler in filler_words:
+            if target_name.startswith(filler):
+                target_name = target_name.replace(filler, "", 1).strip()
+
+        return "open_app", target_name
+
     if command.startswith("set mode "):
         mode_name = command.replace("set mode ", "").strip()
         return "set_mode", mode_name
@@ -99,6 +168,33 @@ def detect_intent(user_input):
 
     if command in ["clear memory", "clear memories", "forget everything"]:
         return "clear_memory", None    
+
+
+
+    if command in ["websites", "show websites", "list websites"]:
+        return "show_websites", None
+
+    known_website_phrases = {
+        "youtube": "youtube",
+        "yt": "yt",
+        "github": "github",
+        "git hub": "git hub",
+        "chatgpt": "chatgpt",
+        "chat gpt": "chat gpt",
+        "google": "google",
+        "canvas": "canvas",
+        "odu canvas": "odu canvas",
+        "odu": "odu",
+    }
+
+    if any(f" {word} " in padded_command for word in open_request_words):
+        for website_phrase, website_key in sorted(
+            known_website_phrases.items(),
+            key=lambda item: len(item[0]),
+            reverse=True
+        ):
+            if f" {website_phrase} " in padded_command:
+                return "open_website", website_key
 
      # Natural app-opening requests
     # Examples:

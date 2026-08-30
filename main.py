@@ -1,6 +1,7 @@
 from brain.intent import detect_intent
 from skills.app_launcher import get_available_apps, open_app
 from brain.ai_brain import answer_question
+from skills.website_launcher import get_available_websites, open_website
 from memory.memory_store import (
     remember_fact,
     get_facts,
@@ -92,6 +93,11 @@ def change_mode(new_mode):
     else:
         kogane_speak("Unknown mode. Available modes are: introvert, extrovert, watcher.")
 
+def show_websites():
+    kogane_speak("Websites I can open:")
+
+    for site_key in get_available_websites():
+        kogane_speak(f"- {site_key}")
 
 def show_apps():
     kogane_speak("Apps I can open:")
@@ -218,3 +224,10 @@ while True:
 
     elif intent == "unknown":
         kogane_speak(get_unknown_response(data, user_name))
+
+    elif intent == "show_websites":
+        show_websites()
+
+    elif intent == "open_website":
+        success, message = open_website(data)
+        kogane_speak(message)
