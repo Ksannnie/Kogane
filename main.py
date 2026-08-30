@@ -41,39 +41,40 @@ def show_status():
 
 def show_help():
     kogane_speak("Here is what I can do right now.")
+    kogane_speak("- Chat with you and answer questions")
+    kogane_speak("- Open apps")
+    kogane_speak("- Save and recall memories")
+    kogane_speak("- Switch personality modes")
+    kogane_speak("Try: app help, memory help, or mode help.")
 
-    kogane_speak("Chat:")
-    kogane_speak("- Ask me questions normally")
-    kogane_speak("- Example: what is an API?")
-    kogane_speak("- Example: explain python imports")
 
-    kogane_speak("Apps:")
+def show_app_help():
+    kogane_speak("App commands:")
     kogane_speak("- open chrome")
     kogane_speak("- open spotify")
     kogane_speak("- open fl studio")
     kogane_speak("- open roblox")
     kogane_speak("- open roblox studio")
-    kogane_speak("- You can also say things like: can you open chrome")
+    kogane_speak("- can you open chrome")
+    kogane_speak("- pull up spotify")
 
-    kogane_speak("Memory:")
+
+def show_memory_help():
+    kogane_speak("Memory commands:")
     kogane_speak("- remember that ...")
     kogane_speak("- memory")
     kogane_speak("- memory count")
     kogane_speak("- delete memory 1")
     kogane_speak("- clear memory")
 
-    kogane_speak("Modes:")
+
+def show_mode_help():
+    kogane_speak("Mode commands:")
     kogane_speak("- mode")
     kogane_speak("- modes")
     kogane_speak("- set mode introvert")
     kogane_speak("- set mode extrovert")
     kogane_speak("- set mode watcher")
-
-    kogane_speak("Other:")
-    kogane_speak("- hello")
-    kogane_speak("- status")
-    kogane_speak("- bye")
-
 
 def show_modes():
     kogane_speak("Available modes:")
@@ -154,6 +155,15 @@ while True:
 
     elif intent == "help":
         show_help()
+
+    elif intent == "app_help":
+        show_app_help()
+
+    elif intent == "memory_help":
+        show_memory_help()
+
+    elif intent == "mode_help":
+        show_mode_help()
 
     elif intent == "status":
         show_status()

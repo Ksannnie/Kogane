@@ -22,6 +22,24 @@ def detect_intent(user_input):
     ]:
         return "help", None
 
+    if command in ["app help", "apps help", "application help"]:
+        return "app_help", None
+
+    if command in ["memory help", "mem help"]:
+        return "memory_help", None
+
+    if command in ["mode help", "modes help"]:
+        return "mode_help", None
+
+    if command in ["app help", "apps help", "application help"]:
+        return "app_help", None
+
+    if command in ["memory help", "mem help"]:
+        return "memory_help", None
+
+    if command in ["mode help", "modes help"]:
+        return "mode_help", None
+
     if command in ["status", "current status"]:
         return "status", None
 
