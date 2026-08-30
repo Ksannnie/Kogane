@@ -2,6 +2,7 @@ from brain.intent import detect_intent
 from skills.app_launcher import get_available_apps, open_app
 from brain.ai_brain import answer_question
 from skills.website_launcher import get_available_websites, open_website
+from skills.folder_launcher import get_available_folders, open_folder
 from memory.memory_store import (
     remember_fact,
     get_facts,
@@ -99,6 +100,12 @@ def show_websites():
     for site_key in get_available_websites():
         kogane_speak(f"- {site_key}")
 
+def show_folders():
+    kogane_speak("Folders I can open:")
+
+    for folder_key in get_available_folders():
+        kogane_speak(f"- {folder_key}")
+
 def show_apps():
     kogane_speak("Apps I can open:")
 
@@ -191,7 +198,30 @@ while True:
         kogane_speak("Try something like: open chrome, open spotify, or open fl studio.")
 
     elif intent == "open_app":
-        success, message = open_app(data)
+        folder_targets = [
+            "desktop",
+            "downloads",
+            "download",
+            "documents",
+            "document",
+            "kogane",
+            "kogane folder",
+            "kogane project",
+        ]
+
+        app_target = data.lower().strip()
+
+        if app_target in folder_targets:
+            if app_target == "download":
+                app_target = "downloads"
+
+            if app_target == "document":
+                app_target = "documents"
+
+            success, message = open_folder(app_target)
+        else:
+            success, message = open_app(data)
+
         kogane_speak(message)
 
     elif intent == "missing_memory":
@@ -230,4 +260,11 @@ while True:
 
     elif intent == "open_website":
         success, message = open_website(data)
+        kogane_speak(message)
+
+    elif intent == "show_folders":
+        show_folders()
+
+    elif intent == "open_folder":
+        success, message = open_folder(data)
         kogane_speak(message)

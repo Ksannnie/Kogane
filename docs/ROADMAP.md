@@ -92,8 +92,8 @@ In progress:
 
 ## v0.6.0 - Desktop Assistant
 
-* [ ] Open apps
-* [ ] Open websites
+- [x] Open apps
+- [x] Open websites
 * [ ] Open project folders
 * [ ] Help manage daily workflow
 * [ ] Add more useful desktop commands

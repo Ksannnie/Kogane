@@ -129,14 +129,41 @@ def detect_intent(user_input):
         return "missing_app", None
 
     if command.startswith("open "):
-        app_name = command.replace("open ", "").strip()
+        target_name = command.replace("open ", "", 1).strip()
 
         filler_words = ["my ", "the ", "a ", "an "]
 
         for filler in filler_words:
-            if app_name.startswith(filler):
-                app_name = app_name.replace(filler, "", 1).strip()
-        return "open_app", app_name
+            if target_name.startswith(filler):
+                target_name = target_name.replace(filler, "", 1).strip()
+
+        folder_targets = [
+            "desktop",
+            "downloads",
+            "download",
+            "documents",
+            "document",
+            "kogane",
+            "kogane folder",
+            "kogane project",
+        ]
+
+        if target_name in folder_targets:
+            if target_name == "download":
+                target_name = "downloads"
+
+            if target_name == "document":
+                target_name = "documents"
+
+            return "open_folder", target_name
+
+        if target_name in known_website_phrases:
+            return "open_website", known_website_phrases[target_name]
+
+        if target_name in known_app_phrases:
+            return "open_app", known_app_phrases[target_name]
+
+        return "open_app", target_name
 
     if command == "remember":
         return "missing_memory", None
@@ -174,6 +201,18 @@ def detect_intent(user_input):
     if command in ["websites", "show websites", "list websites"]:
         return "show_websites", None
 
+    if command in ["folders", "show folders", "list folders"]:
+        return "show_folders", None
+
+    known_folder_phrases = {
+        "desktop": "desktop",
+        "downloads": "downloads",
+        "documents": "documents",
+        "kogane": "kogane",
+        "kogane folder": "kogane folder",
+        "kogane project": "kogane project",
+    }
+
     known_website_phrases = {
         "youtube": "youtube",
         "yt": "yt",
@@ -186,6 +225,15 @@ def detect_intent(user_input):
         "odu canvas": "odu canvas",
         "odu": "odu",
     }
+
+            # Then check folders.
+    for folder_phrase, folder_key in sorted(
+        known_folder_phrases.items(),
+        key=lambda item: len(item[0]),
+        reverse=True
+        ):
+        if f" {folder_phrase} " in padded_command:
+            return "open_folder", folder_key
 
     if any(f" {word} " in padded_command for word in open_request_words):
         for website_phrase, website_key in sorted(
