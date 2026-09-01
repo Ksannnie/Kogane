@@ -1,4 +1,5 @@
 import webbrowser
+from urllib.parse import quote_plus
 
 
 WEBSITE_ALIASES = {
@@ -20,6 +21,15 @@ WEBSITE_ALIASES = {
 }
 
 
+SEARCH_URLS = {
+    "google": "https://www.google.com/search?q=",
+    "youtube": "https://www.youtube.com/results?search_query=",
+    "yt": "https://www.youtube.com/results?search_query=",
+    "github": "https://github.com/search?q=",
+    "git hub": "https://github.com/search?q=",
+}
+
+
 def get_available_websites():
     return sorted(WEBSITE_ALIASES.keys())
 
@@ -34,3 +44,19 @@ def open_website(site_name):
     webbrowser.open(website_url)
 
     return True, f"Opening {site_key}."
+
+
+def search_website(site_name, search_query):
+    site_key = site_name.lower().strip()
+    query = search_query.strip()
+
+    if site_key not in SEARCH_URLS:
+        return False, f"I cannot search '{site_name}' yet."
+
+    if query == "":
+        return False, "You gave me a search command, but nothing to search for."
+
+    search_url = SEARCH_URLS[site_key] + quote_plus(query)
+    webbrowser.open(search_url)
+
+    return True, f"Searching {site_key} for {query}."

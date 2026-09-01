@@ -1,7 +1,11 @@
 from brain.intent import detect_intent
 from skills.app_launcher import get_available_apps, open_app
 from brain.ai_brain import answer_question
-from skills.website_launcher import get_available_websites, open_website
+from skills.website_launcher import (
+    get_available_websites,
+    open_website,
+    search_website,
+)
 from skills.folder_launcher import get_available_folders, open_folder
 from memory.memory_store import (
     remember_fact,
@@ -260,6 +264,11 @@ while True:
 
     elif intent == "open_website":
         success, message = open_website(data)
+        kogane_speak(message)
+
+    elif intent == "search_website":
+        site_name, search_query = data
+        success, message = search_website(site_name, search_query)
         kogane_speak(message)
 
     elif intent == "show_folders":

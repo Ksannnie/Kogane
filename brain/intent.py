@@ -55,6 +55,27 @@ def detect_intent(user_input):
     if command in ["websites", "show websites", "list websites"]:
         return "show_websites", None
 
+    search_sites = ["google", "youtube", "yt", "github", "git hub"]
+
+    for site in search_sites:
+        search_start = f"{site} search "
+
+        if command.startswith(search_start):
+            search_query = command.replace(search_start, "", 1).strip()
+            return "search_website", (site, search_query)
+
+    if command.startswith("search google for "):
+        search_query = command.replace("search google for ", "", 1).strip()
+        return "search_website", ("google", search_query)
+
+    if command.startswith("search youtube for "):
+        search_query = command.replace("search youtube for ", "", 1).strip()
+        return "search_website", ("youtube", search_query)
+
+    if command.startswith("search github for "):
+        search_query = command.replace("search github for ", "", 1).strip()
+        return "search_website", ("github", search_query)
+
     open_request_words = ["open", "launch", "start", "pull up"]
     padded_command = f" {command} "
 
