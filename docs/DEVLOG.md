@@ -320,3 +320,124 @@ Possible next goals:
 * Update the roadmap
 * Continue polishing KOGANE's natural conversation
 * Keep building toward a more useful desktop AI companion
+
+## Day 6 - Website Search, Folder Launching, and Search Help
+
+Today was a lock-in session focused on making KOGANE more useful as a real desktop assistant.
+
+The main goal was to expand KOGANE beyond opening apps. KOGANE can now open websites, open folders, and search directly through Google, YouTube, and GitHub.
+
+### Completed Today
+
+* Added website launching
+* Added website search commands
+* Added folder launching
+* Fixed folder routing issues
+* Added fallback routing so folder commands still work even if detected as app commands
+* Added `search help`
+* Updated the main help menu to mention website search
+* Tested that AI question answering still works after the new features
+* Committed and pushed the new search help update to GitHub
+
+### New Website Commands
+
+KOGANE can now open websites such as:
+
+```text
+open youtube
+open github
+open chatgpt
+open canvas
+open google
+```
+
+KOGANE can also understand natural website commands like:
+
+```text
+pull up github
+can you open chatgpt
+```
+
+### New Search Commands
+
+KOGANE can now search websites directly.
+
+Tested commands:
+
+```text
+google search esp32 s3 pinout
+youtube search python classes tutorial
+github search ollama python
+search google for kogane jjk
+search youtube for game maker studio tutorial
+```
+
+### New Folder Commands
+
+KOGANE can now open folders such as:
+
+```text
+open downloads
+open documents
+open desktop
+open kogane folder
+```
+
+The folder routing caused issues at first because KOGANE treated folders like apps, but the fallback routing in `main.py` fixed it.
+
+### Help Menu Update
+
+Added:
+
+```text
+search help
+```
+
+This lets KOGANE explain search commands without dumping every command at once.
+
+### Commands Tested
+
+```text
+help
+search help
+google search esp32 s3 pinout
+youtube search python classes tutorial
+github search ollama python
+open youtube
+open chrome
+open downloads
+what is an API?
+bye
+```
+
+### GitHub Commits
+
+Recent commits included:
+
+```bash
+git commit -m "Add website search commands"
+git commit -m "Add search help menu"
+```
+
+### Current Status
+
+```text
+v0.1.0 - Initialization complete
+v0.2.0 - Text Command System complete
+v0.3.0 - Memory complete
+v0.4.0 - AI Brain working prototype
+Desktop assistant features are actively expanding
+```
+
+KOGANE can now chat, remember information, switch modes, open apps, open websites, open folders, and search websites.
+
+### Next Session Plan
+
+Next session, possible goals are:
+
+* Update `ROADMAP.md`
+* Add `folder help`
+* Add `website help`
+* Add more useful websites like ODU email, Canvas assignments, and GitHub repo links
+* Add project-specific commands like `open kogane repo`
+* Continue polishing KOGANE’s natural conversation and command detection
