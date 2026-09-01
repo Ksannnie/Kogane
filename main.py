@@ -46,12 +46,12 @@ def show_status():
 
 
 def show_help():
-    kogane_speak("Here is what I can do right now.")
-    kogane_speak("- Chat with you and answer questions")
     kogane_speak("- Open apps")
+    kogane_speak("- Open websites and folders")
+    kogane_speak("- Search Google, YouTube, and GitHub")
     kogane_speak("- Save and recall memories")
     kogane_speak("- Switch personality modes")
-    kogane_speak("Try: app help, memory help, or mode help.")
+    kogane_speak("Try: app help, search help, memory help, or mode help.")
 
 
 def show_app_help():
@@ -87,6 +87,15 @@ def show_modes():
 
     for mode_key, mode_info in get_all_modes().items():
         kogane_speak(f"{mode_info['name']} - {mode_info['description']}")
+
+def show_search_help():
+    kogane_speak("Search commands:")
+    kogane_speak("- google search esp32 s3 pinout")
+    kogane_speak("- youtube search python classes tutorial")
+    kogane_speak("- github search ollama python")
+    kogane_speak("- search google for kogane jjk")
+    kogane_speak("- search youtube for gamemaker tutorial")
+    kogane_speak("- search github for esp32 projects")
 
 
 def change_mode(new_mode):
@@ -181,6 +190,9 @@ while True:
 
     elif intent == "mode_help":
         show_mode_help()
+
+    elif intent == "search_help":
+        show_search_help()
 
     elif intent == "status":
         show_status()
