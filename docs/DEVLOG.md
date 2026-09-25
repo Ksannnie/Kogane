@@ -441,3 +441,34 @@ Next session, possible goals are:
 * Add more useful websites like ODU email, Canvas assignments, and GitHub repo links
 * Add project-specific commands like `open kogane repo`
 * Continue polishing KOGANE’s natural conversation and command detection
+
+
+
+## Day 7 - Folder Help Menu and Codex Workflow
+
+Today I continued improving KOGANE as a desktop assistant and tested using Codex/Astra as a coding helper.
+
+The main goal was to add a cleaner help menu for folder commands so KOGANE can explain how to open folders without dumping every command at once.
+
+### Completed Today
+
+- Used Codex/Astra to help implement a small focused feature
+- Added `folder help`
+- Added `folders help`
+- Added `folder commands`
+- Confirmed that folder launching still works
+- Confirmed that app launching still works
+- Confirmed that website opening still works
+- Confirmed that website search still works
+- Confirmed that AI question answering still works
+- Committed and pushed the update to GitHub
+
+### New Folder Help Commands
+
+KOGANE now understands:
+
+```text
+folder help
+folders help
+folder commands
+

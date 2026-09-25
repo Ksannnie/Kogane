@@ -2,19 +2,25 @@
 
 ## Current Status
 
-KOGANE is currently in early development.
+KOGANE is currently in early desktop assistant development.
 
-Current phase: **v0.3.0 - Memory**
+Current phase: **v0.6.0 - Desktop Assistant**
 
 Completed:
 
 * v0.1.0 - Initialization
 * v0.2.0 - Text Command System
+* v0.3.0 - Memory
+* v0.4.0 - AI Brain
+* Core app, website, folder, and search commands
 
 In progress:
 
-* v0.3.0 - Memory
-* Personality response layer
+* v0.6.0 - Desktop Assistant
+* Cleaner command routing
+* More project-specific shortcuts
+* Focused help menus
+* Portfolio-ready documentation
 
 ---
 
@@ -90,15 +96,51 @@ In progress:
 
 ---
 
-## v0.6.0 - Desktop Assistant
+## v0.6.0 - Desktop Assistant 🚧
 
-- [x] Open apps
-- [x] Open websites
-* [ ] Open project folders
-* [ ] Help manage daily workflow
-* [ ] Add more useful desktop commands
-* [ ] Add command shortcuts for creative tools
-* [ ] Add command shortcuts for school/work tools
+* [x] Open apps
+* [x] Open apps from natural language
+* [x] Open Google Chrome
+* [x] Open Spotify
+* [x] Open FL Studio
+* [x] Open Roblox
+* [x] Open Roblox Studio
+* [x] Fix Roblox Studio path issue
+
+* [x] Open websites
+* [x] Open websites from natural language
+* [x] Open YouTube
+* [x] Open GitHub
+* [x] Open ChatGPT
+* [x] Open Canvas
+* [x] Open Google
+
+* [x] Search Google
+* [x] Search YouTube
+* [x] Search GitHub
+* [x] Add search help menu
+
+* [x] Open folders
+* [x] Open Downloads
+* [x] Open Documents
+* [x] Open Desktop
+* [x] Open KOGANE project folder
+* [x] Add folder help menu
+
+* [x] Add focused help menus
+* [x] Add app help
+* [x] Add memory help
+* [x] Add mode help
+* [x] Add search help
+* [x] Add folder help
+
+* [ ] Add website help
+* [ ] Add project-specific shortcuts
+* [ ] Add `open kogane repo`
+* [ ] Add `open canvas assignments`
+* [ ] Add `open odu email`
+* [ ] Add better error messages for failed launches
+* [ ] Clean up command routing in `brain/intent.py`
 
 ---
 
@@ -139,16 +181,25 @@ In progress:
 
 ---
 
-## v1.0.0 - First Stable Release
+## v1.0.0 - First Stable Portfolio Release 🚧
 
-* [ ] Text commands
-* [ ] Memory
-* [ ] AI brain
-* [ ] Voice
-* [ ] App launching
-* [ ] Personality modes
-* [ ] Basic interface
-* [ ] Documentation complete
+* [x] Project structure
+* [x] GitHub repository
+* [x] Text command system
+* [x] Personality modes
+* [x] Memory system
+* [x] AI question answering
+* [x] App launching
+* [x] Website launching
+* [x] Website search
+* [x] Folder launching
+* [x] Focused help menus
+
+* [ ] Voice input
+* [ ] Voice output
+* [ ] Simple visual interface
+* [ ] Cleaner command routing
+* [ ] Complete documentation
 * [ ] Stable enough to show in a portfolio
 
 ---
