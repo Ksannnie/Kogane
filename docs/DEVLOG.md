@@ -419,6 +419,7 @@ git commit -m "Add website search commands"
 git commit -m "Add search help menu"
 ```
 
+
 ### Current Status
 
 ```text
@@ -471,4 +472,34 @@ KOGANE now understands:
 folder help
 folders help
 folder commands
+```
 
+## Day 8 - Project Shortcut Commands
+
+Today I added project-specific shortcuts to KOGANE so it feels more like a personal desktop assistant instead of only a general command launcher.
+
+### Completed Today
+
+- Added `project help`
+- Added `project commands`
+- Added shortcut for opening the KOGANE GitHub repo
+- Added shortcut for opening my GitHub profile
+- Added shortcut for opening Canvas assignments
+- Added shortcut for opening ODU email
+- Confirmed existing app commands still work
+- Confirmed existing website commands still work
+- Confirmed existing folder commands still work
+- Confirmed website search still works
+- Confirmed AI question answering still works
+- Committed and pushed the update to GitHub
+
+### New Project Commands
+
+```text
+project help
+project commands
+open kogane repo
+open github kogane
+open my github
+open canvas assignments
+open odu email
