@@ -148,17 +148,6 @@ def detect_intent(user_input):
             if f" {app_phrase} " in padded_command:
                 return "open_app", app_key
 
-    if command.startswith("open "):
-        target_name = command.replace("open ", "", 1).strip()
-
-        filler_words = ["my ", "the ", "a ", "an "]
-
-        for filler in filler_words:
-            if target_name.startswith(filler):
-                target_name = target_name.replace(filler, "", 1).strip()
-
-        return "open_app", target_name
-
     if command.startswith("set mode "):
         mode_name = command.replace("set mode ", "").strip()
         return "set_mode", mode_name
