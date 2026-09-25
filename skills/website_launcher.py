@@ -8,6 +8,9 @@ WEBSITE_ALIASES = {
 
     "github": "https://github.com",
     "git hub": "https://github.com",
+    "kogane repo": "https://github.com/Ksannnie/Kogane",
+    "github kogane": "https://github.com/Ksannnie/Kogane",
+    "my github": "https://github.com/Ksannnie",
 
     "chatgpt": "https://chatgpt.com",
     "chat gpt": "https://chatgpt.com",
@@ -16,8 +19,10 @@ WEBSITE_ALIASES = {
 
     "canvas": "https://canvas.odu.edu",
     "odu canvas": "https://canvas.odu.edu",
+    "canvas assignments": "https://canvas.odu.edu/calendar",
 
     "odu": "https://www.odu.edu",
+    "odu email": "https://outlook.odu.edu",
 }
 
 

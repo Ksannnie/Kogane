@@ -28,6 +28,9 @@ def detect_intent(user_input):
     if command in ["folder help", "folders help", "folder commands"]:
         return "folder_help", None
 
+    if command in ["project help", "project commands"]:
+        return "project_help", None
+
     if command in ["app help", "apps help", "application help"]:
         return "app_help", None
 
@@ -90,12 +93,17 @@ def detect_intent(user_input):
         "yt": "yt",
         "github": "github",
         "git hub": "git hub",
+        "kogane repo": "kogane repo",
+        "github kogane": "github kogane",
+        "my github": "my github",
         "chatgpt": "chatgpt",
         "chat gpt": "chat gpt",
         "google": "google",
         "canvas": "canvas",
+        "canvas assignments": "canvas assignments",
         "odu canvas": "odu canvas",
         "odu": "odu",
+        "odu email": "odu email",
     }
 
     known_app_phrases = {
