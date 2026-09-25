@@ -51,7 +51,7 @@ def show_help():
     kogane_speak("- Search Google, YouTube, and GitHub")
     kogane_speak("- Save and recall memories")
     kogane_speak("- Switch personality modes")
-    kogane_speak("Try: app help, search help, memory help, or mode help.")
+    kogane_speak("Try: app help, search help, folder help, memory help, or mode help.")
 
 
 def show_app_help():
@@ -96,6 +96,16 @@ def show_search_help():
     kogane_speak("- search google for kogane jjk")
     kogane_speak("- search youtube for gamemaker tutorial")
     kogane_speak("- search github for esp32 projects")
+
+
+def show_folder_help():
+    kogane_speak("Folder commands:")
+    kogane_speak("- folders")
+    kogane_speak("- open downloads")
+    kogane_speak("- open documents")
+    kogane_speak("- open desktop")
+    kogane_speak("- open kogane folder")
+    kogane_speak("- pull up my kogane project")
 
 
 def change_mode(new_mode):
@@ -193,6 +203,9 @@ while True:
 
     elif intent == "search_help":
         show_search_help()
+
+    elif intent == "folder_help":
+        show_folder_help()
 
     elif intent == "status":
         show_status()

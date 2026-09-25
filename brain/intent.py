@@ -25,6 +25,9 @@ def detect_intent(user_input):
     if command in ["search help", "search commands", "website search help"]:
         return "search_help", None
 
+    if command in ["folder help", "folders help", "folder commands"]:
+        return "folder_help", None
+
     if command in ["app help", "apps help", "application help"]:
         return "app_help", None
 
