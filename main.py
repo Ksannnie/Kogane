@@ -51,7 +51,7 @@ def show_help():
     kogane_speak("- Search Google, YouTube, and GitHub")
     kogane_speak("- Save and recall memories")
     kogane_speak("- Switch personality modes")
-    kogane_speak("Try: app help, search help, folder help, project help, memory help, or mode help.")
+    kogane_speak("Try: app help, website help, search help, folder help, project help, memory help, or mode help.")
 
 
 def show_app_help():
@@ -63,6 +63,18 @@ def show_app_help():
     kogane_speak("- open roblox studio")
     kogane_speak("- can you open chrome")
     kogane_speak("- pull up spotify")
+
+
+def show_website_help():
+    kogane_speak("Website commands:")
+    kogane_speak("- websites")
+    kogane_speak("- open youtube")
+    kogane_speak("- open github")
+    kogane_speak("- open chatgpt")
+    kogane_speak("- open canvas")
+    kogane_speak("- open google")
+    kogane_speak("- pull up github")
+    kogane_speak("- can you open chatgpt")
 
 
 def show_memory_help():
@@ -203,6 +215,9 @@ while True:
 
     elif intent == "app_help":
         show_app_help()
+
+    elif intent == "website_help":
+        show_website_help()
 
     elif intent == "memory_help":
         show_memory_help()
