@@ -39,6 +39,9 @@ def detect_intent(user_input):
     if command in ["project help", "project commands"]:
         return "project_help", None
 
+    if command in ["workflow help", "workflows help", "workflow commands"]:
+        return "workflow_help", None
+
     if command in ["app help", "apps help", "application help"]:
         return "app_help", None
 
@@ -47,6 +50,20 @@ def detect_intent(user_input):
 
     if command in ["mode help", "modes help"]:
         return "mode_help", None
+
+    # Workflow shortcuts
+    workflow_commands = {
+        "start coding": "coding",
+        "start school": "school",
+        "start music": "music",
+    }
+
+    if command in workflow_commands:
+        return "start_workflow", workflow_commands[command]
+
+    # Music app shortcuts; "start music" remains a workflow.
+    if command in ["open music", "play music"]:
+        return "open_app", "spotify"
 
     # Status and mode commands
     if command in ["status", "current status"]:

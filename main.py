@@ -49,9 +49,13 @@ def show_help():
     kogane_speak("- Open apps")
     kogane_speak("- Open websites and folders")
     kogane_speak("- Search Google, YouTube, and GitHub")
+    kogane_speak("- Start coding, school, or music workflows")
     kogane_speak("- Save and recall memories")
     kogane_speak("- Switch personality modes")
-    kogane_speak("Try: app help, website help, search help, folder help, project help, memory help, or mode help.")
+    kogane_speak(
+        "Try: app help, website help, search help, folder help, project help, "
+        "workflow help, memory help, or mode help."
+    )
 
 
 def show_app_help():
@@ -127,6 +131,38 @@ def show_project_help():
     kogane_speak("- open my github")
     kogane_speak("- open canvas assignments")
     kogane_speak("- open odu email")
+
+
+def show_workflow_help():
+    kogane_speak("Workflow commands:")
+    kogane_speak("- start coding: KOGANE project folder, KOGANE GitHub repo, and VS Code")
+    kogane_speak("- start school: Canvas assignments, ODU email, and ChatGPT")
+    kogane_speak("- start music: Spotify and YouTube")
+
+
+def start_workflow(workflow_name):
+    workflows = {
+        "coding": [
+            (open_folder, "kogane folder"),
+            (open_website, "kogane repo"),
+            (open_app, "vscode"),
+        ],
+        "school": [
+            (open_website, "canvas assignments"),
+            (open_website, "odu email"),
+            (open_website, "chatgpt"),
+        ],
+        "music": [
+            (open_app, "spotify"),
+            (open_website, "youtube"),
+        ],
+    }
+
+    kogane_speak(f"Starting {workflow_name} workflow.")
+
+    for launcher, target in workflows[workflow_name]:
+        success, message = launcher(target)
+        kogane_speak(message)
 
 
 def change_mode(new_mode):
@@ -233,6 +269,12 @@ while True:
 
     elif intent == "project_help":
         show_project_help()
+
+    elif intent == "workflow_help":
+        show_workflow_help()
+
+    elif intent == "start_workflow":
+        start_workflow(data)
 
     elif intent == "status":
         show_status()
