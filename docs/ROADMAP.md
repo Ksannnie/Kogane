@@ -134,6 +134,12 @@ In progress:
 * [x] Add search help
 * [x] Add folder help
 
+* [x] Add a local schedule/calendar stored in JSON
+* [x] Add timed and all-day events with date/time validation
+* [x] Show upcoming, today, tomorrow, and next-seven-day schedules
+* [x] Delete events by their number in the displayed schedule
+* [x] Add schedule help and schedule tests
+
 * [ ] Add website help
 * [ ] Add project-specific shortcuts
 * [ ] Add `open kogane repo`

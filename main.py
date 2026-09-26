@@ -13,6 +13,14 @@ from memory.memory_store import (
     delete_fact,
     clear_all_memories as clear_memory_store,
 )
+from memory.schedule_store import (
+    add_event,
+    delete_event,
+    list_upcoming_events,
+    list_today_events,
+    list_tomorrow_events,
+    list_week_events,
+)
 from personality.modes import (
     get_activation_message,
     get_all_modes,
@@ -30,6 +38,8 @@ from personality.responses import (
 assistant_name = "Kogane"
 user_name = "Kevin"
 current_mode = "introvert"
+displayed_schedule_events = None
+current_schedule_view = "upcoming"
 
 
 def kogane_speak(message):
@@ -51,10 +61,11 @@ def show_help():
     kogane_speak("- Search Google, YouTube, and GitHub")
     kogane_speak("- Start coding, school, or music workflows")
     kogane_speak("- Save and recall memories")
+    kogane_speak("- Save events and check your schedule")
     kogane_speak("- Switch personality modes")
     kogane_speak(
         "Try: app help, website help, search help, folder help, project help, "
-        "workflow help, memory help, or mode help."
+        "workflow help, schedule help, memory help, or mode help."
     )
 
 
@@ -88,6 +99,60 @@ def show_memory_help():
     kogane_speak("- memory count")
     kogane_speak("- delete memory 1")
     kogane_speak("- clear memory")
+
+
+def show_schedule_help():
+    kogane_speak("Schedule commands:")
+    kogane_speak("- schedule help / calendar help")
+    kogane_speak("- add event YYYY-MM-DD HH:MM event title")
+    kogane_speak("- add event YYYY-MM-DD event title (all day)")
+    kogane_speak("- schedule / calendar: today and later")
+    kogane_speak("- today / tomorrow")
+    kogane_speak("- this week: today and the next six days")
+    kogane_speak("- delete event NUMBER: use the number in the last displayed list")
+    kogane_speak("Dates and 24-hour times use your computer's local time.")
+
+
+def show_schedule(view):
+    global displayed_schedule_events, current_schedule_view
+
+    views = {
+        "upcoming": list_upcoming_events,
+        "today": list_today_events,
+        "tomorrow": list_tomorrow_events,
+        "this week": list_week_events,
+    }
+    displayed_schedule_events = None
+    events = views[view]()
+    displayed_schedule_events = events
+    current_schedule_view = view
+
+    if not events:
+        kogane_speak("No events found, Kevin.")
+        return
+
+    kogane_speak(f"Your schedule ({view}):")
+    for number, event in enumerate(events, start=1):
+        event_time = event["time"] or "All day"
+        kogane_speak(f"{number}. {event['date']} {event_time} - {event['title']}")
+
+
+def handle_schedule_command(intent, data):
+    try:
+        if intent == "show_schedule":
+            show_schedule(data)
+        elif intent == "add_event":
+            success, message = add_event(data)
+            kogane_speak(message)
+            if success:
+                show_schedule("upcoming")
+        elif intent == "delete_event":
+            success, message = delete_event(data, displayed_schedule_events)
+            kogane_speak(message)
+            if success:
+                show_schedule(current_schedule_view)
+    except (OSError, ValueError) as error:
+        kogane_speak(f"I could not finish that schedule request: {error}")
 
 
 def show_mode_help():
@@ -257,6 +322,12 @@ while True:
 
     elif intent == "memory_help":
         show_memory_help()
+
+    elif intent == "schedule_help":
+        show_schedule_help()
+
+    elif intent in ["add_event", "show_schedule", "delete_event"]:
+        handle_schedule_command(intent, data)
 
     elif intent == "mode_help":
         show_mode_help()

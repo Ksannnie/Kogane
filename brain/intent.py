@@ -51,6 +51,22 @@ def detect_intent(user_input):
     if command in ["mode help", "modes help"]:
         return "mode_help", None
 
+    if command in ["schedule help", "calendar help"]:
+        return "schedule_help", None
+
+    # Schedule commands come before launch matching so event titles stay text.
+    if command == "add event" or command.startswith("add event "):
+        return "add_event", user_input.strip()[len("add event"):].strip()
+
+    if command == "delete event" or command.startswith("delete event "):
+        return "delete_event", user_input.strip()[len("delete event"):].strip()
+
+    if command in ["schedule", "calendar"]:
+        return "show_schedule", "upcoming"
+
+    if command in ["today", "tomorrow", "this week"]:
+        return "show_schedule", command
+
     # Workflow shortcuts
     workflow_commands = {
         "start coding": "coding",

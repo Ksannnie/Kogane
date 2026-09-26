@@ -503,3 +503,37 @@ open github kogane
 open my github
 open canvas assignments
 open odu email
+```
+
+## Local Schedule and Calendar
+
+Added a local schedule using Python's standard library and `memory/schedule.json`.
+Events keep their date, optional time, title capitalization, and creation timestamp.
+The local data file is ignored by Git and is recreated on the first saved event if missing.
+
+Commands:
+
+```text
+schedule help
+calendar help
+add event 2026-09-26 15:00 Calculus study
+add event 2026-09-30 CHEM lab report due
+schedule
+calendar
+today
+tomorrow
+this week
+delete event 2
+```
+
+`schedule` and `calendar` show today and later in date/time order. `this week`
+includes today through six days from today, using the computer's local date.
+Events without a time display as `All day`.
+
+Deletion uses the most recently displayed list, including filtered views. Show a
+list before deleting; the list refreshes after each successful deletion. Invalid
+dates, times, and event numbers receive a helpful message. Damaged saved data is
+reported instead of being overwritten.
+
+Validation: `python3 tests/test_intent.py` and `python3 tests/test_schedule.py`
+passed. Schedule storage tests use temporary files and a fixed date.
