@@ -1,15 +1,20 @@
 def detect_intent(user_input):
+    """Return the first matching intent and its data in routing priority order."""
     command = user_input.lower().strip()
 
+    # Empty input
     if command == "":
         return "empty", None
 
+    # Quit commands
     if command in ["bye", "exit", "quit", "stop"]:
         return "exit", None
-    
-    if command in ["hello", "hi", "hey", "yo", "sup", "what's up"]:
-       return "greeting", None
 
+    # Greetings
+    if command in ["hello", "hi", "hey", "yo", "sup", "what's up"]:
+        return "greeting", None
+
+    # Help commands
     if command in [
         "help",
         "commands",
@@ -43,15 +48,7 @@ def detect_intent(user_input):
     if command in ["mode help", "modes help"]:
         return "mode_help", None
 
-    if command in ["app help", "apps help", "application help"]:
-        return "app_help", None
-
-    if command in ["memory help", "mem help"]:
-        return "memory_help", None
-
-    if command in ["mode help", "modes help"]:
-        return "mode_help", None
-
+    # Status and mode commands
     if command in ["status", "current status"]:
         return "status", None
 
@@ -61,12 +58,14 @@ def detect_intent(user_input):
     if command in ["modes", "show modes", "list modes"]:
         return "modes", None
 
+    # App and website lists
     if command in ["apps", "show apps", "list apps", "what can you open"]:
         return "show_apps", None
 
     if command in ["websites", "show websites", "list websites"]:
         return "show_websites", None
 
+    # Website search (before opening, since queries can contain launch words)
     search_sites = ["google", "youtube", "yt", "github", "git hub"]
 
     for site in search_sites:
@@ -88,6 +87,7 @@ def detect_intent(user_input):
         search_query = command.replace("search github for ", "", 1).strip()
         return "search_website", ("github", search_query)
 
+    # Opening aliases: websites and project shortcuts share open_website.
     open_request_words = ["open", "launch", "start", "pull up"]
     padded_command = f" {command} "
 
@@ -96,16 +96,18 @@ def detect_intent(user_input):
         "yt": "yt",
         "github": "github",
         "git hub": "git hub",
-        "kogane repo": "kogane repo",
-        "github kogane": "github kogane",
-        "my github": "my github",
         "chatgpt": "chatgpt",
         "chat gpt": "chat gpt",
         "google": "google",
         "canvas": "canvas",
-        "canvas assignments": "canvas assignments",
         "odu canvas": "odu canvas",
         "odu": "odu",
+
+        # Project shortcuts
+        "kogane repo": "kogane repo",
+        "github kogane": "github kogane",
+        "my github": "my github",
+        "canvas assignments": "canvas assignments",
         "odu email": "odu email",
     }
 
@@ -129,32 +131,32 @@ def detect_intent(user_input):
     if command == "open":
         return "missing_app", None
 
+    # Natural opening requests take priority over mode changes and memory.
     if any(f" {word} " in padded_command for word in open_request_words):
-        # Check websites first so "open youtube" does not get treated like an app.
+        # Website opening and project shortcuts: match longer aliases first.
         for website_phrase, website_key in sorted(
             known_website_phrases.items(),
             key=lambda item: len(item[0]),
-            reverse=True
+            reverse=True,
         ):
             if f" {website_phrase} " in padded_command:
                 return "open_website", website_key
 
-        # Then check apps.
+        # App opening: websites keep priority when both kinds of alias appear.
         for app_phrase, app_key in sorted(
             known_app_phrases.items(),
             key=lambda item: len(item[0]),
-            reverse=True
+            reverse=True,
         ):
             if f" {app_phrase} " in padded_command:
                 return "open_app", app_key
 
+    # Mode changes (after natural opening requests to preserve priority)
     if command.startswith("set mode "):
         mode_name = command.replace("set mode ", "").strip()
         return "set_mode", mode_name
 
-    if command == "open":
-        return "missing_app", None
-
+    # Explicit opening: strip filler words, then try folders, websites, and apps.
     if command.startswith("open "):
         target_name = command.replace("open ", "", 1).strip()
 
@@ -164,6 +166,7 @@ def detect_intent(user_input):
             if target_name.startswith(filler):
                 target_name = target_name.replace(filler, "", 1).strip()
 
+        # Folder opening, including singular download/document aliases
         folder_targets = [
             "desktop",
             "downloads",
@@ -184,6 +187,7 @@ def detect_intent(user_input):
 
             return "open_folder", target_name
 
+        # Exact website and app aliases, then the unknown-app fallback
         if target_name in known_website_phrases:
             return "open_website", known_website_phrases[target_name]
 
@@ -192,6 +196,7 @@ def detect_intent(user_input):
 
         return "open_app", target_name
 
+    # Memory commands
     if command == "remember":
         return "missing_memory", None
 
@@ -221,13 +226,9 @@ def detect_intent(user_input):
         return "delete_memory", memory_number
 
     if command in ["clear memory", "clear memories", "forget everything"]:
-        return "clear_memory", None    
+        return "clear_memory", None
 
-
-
-    if command in ["websites", "show websites", "list websites"]:
-        return "show_websites", None
-
+    # Folder lists and natural folder opening
     if command in ["folders", "show folders", "list folders"]:
         return "show_folders", None
 
@@ -240,96 +241,38 @@ def detect_intent(user_input):
         "kogane project": "kogane project",
     }
 
-    known_website_phrases = {
-        "youtube": "youtube",
-        "yt": "yt",
-        "github": "github",
-        "git hub": "git hub",
-        "chatgpt": "chatgpt",
-        "chat gpt": "chat gpt",
-        "google": "google",
-        "canvas": "canvas",
-        "odu canvas": "odu canvas",
-        "odu": "odu",
-    }
-
-            # Then check folders.
+    # Preserve the existing phrase match even without an opening verb.
     for folder_phrase, folder_key in sorted(
         known_folder_phrases.items(),
         key=lambda item: len(item[0]),
-        reverse=True
-        ):
+        reverse=True,
+    ):
         if f" {folder_phrase} " in padded_command:
             return "open_folder", folder_key
 
-    if any(f" {word} " in padded_command for word in open_request_words):
-        for website_phrase, website_key in sorted(
-            known_website_phrases.items(),
-            key=lambda item: len(item[0]),
-            reverse=True
-        ):
-            if f" {website_phrase} " in padded_command:
-                return "open_website", website_key
-
-     # Natural app-opening requests
-    # Examples:
-    # "can you open chrome"
-    # "okay so open roblox studio"
-    # "how bout you open my google chrome then"
-    # "pull up spotify"
-
-    open_request_words = ["open", "launch", "start", "pull up"]
-
-    known_app_phrases = {
-        "google chrome": "chrome",
-        "chrome": "chrome",
-        "spotify": "spotify",
-        "fl studio": "fl studio",
-        "fl": "fl studio",
-        "roblox studio": "roblox studio",
-        "rblx studio": "roblox studio",
-        "rbx studio": "roblox studio",
-        "roblox": "roblox",
-        "rblx": "roblox",
-        "rbx": "roblox",
-        "vs code": "vscode",
-        "vscode": "vscode",
-        "visual studio code": "vscode",
-    }
-
-    padded_command = f" {command} "
-
-    if any(f" {word} " in padded_command for word in open_request_words):
-        for app_phrase, app_key in sorted(
-            known_app_phrases.items(),
-            key=lambda item: len(item[0]),
-            reverse=True
-        ):
-            if f" {app_phrase} " in padded_command:
-                return "open_app", app_key
-
+    # Question fallback
     question_starters = [
-    "what",
-    "what's",
-    "whats",
-    "why",
-    "how",
-    "when",
-    "where",
-    "who",
-    "can",
-    "could",
-    "should",
-    "would",
-    "is",
-    "are",
-    "do",
-    "does",
-    "did",
-    "explain",
-    "tell me",
-    "teach me",
-]
+        "what",
+        "what's",
+        "whats",
+        "why",
+        "how",
+        "when",
+        "where",
+        "who",
+        "can",
+        "could",
+        "should",
+        "would",
+        "is",
+        "are",
+        "do",
+        "does",
+        "did",
+        "explain",
+        "tell me",
+        "teach me",
+    ]
 
     if command.endswith("?"):
         return "question", user_input
@@ -338,9 +281,8 @@ def detect_intent(user_input):
         if command.startswith(starter + " ") or command == starter:
             return "question", user_input
 
-# General conversation fallback
-# If I type a normal sentence, send it to the AI brain.
+    # General conversation: send multi-word input to the AI brain.
     if len(command.split()) >= 2:
-     return "question", user_input
-    
+        return "question", user_input
+
     return "unknown", user_input
