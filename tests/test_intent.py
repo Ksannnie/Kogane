@@ -41,6 +41,36 @@ def test_intent_routing():
         ("add event", ("add_event", "")),
         ("delete event", ("delete_event", "")),
         (
+            "remind me on 2026-09-30 at 5pm to do CHEM lab report",
+            ("add_event", "remind me on 2026-09-30 at 5pm to do CHEM lab report"),
+        ),
+        (
+            "remind me on 2026-09-30 to do CHEM lab report",
+            ("add_event", "remind me on 2026-09-30 to do CHEM lab report"),
+        ),
+        (
+            "I have calculus homework due 2026-09-29",
+            ("add_event", "I have calculus homework due 2026-09-29"),
+        ),
+        (
+            "I have CHEM lab due on 2026-09-30",
+            ("add_event", "I have CHEM lab due on 2026-09-30"),
+        ),
+        ("what do I have tomorrow", ("show_schedule", "tomorrow")),
+        ("what do I have today", ("show_schedule", "today")),
+        ("what's my schedule this week", ("show_schedule", "this week")),
+        ("what’s my schedule this week?", ("show_schedule", "this week")),
+        ("what's on my calendar", ("show_schedule", "upcoming")),
+        ("show my schedule", ("show_schedule", "upcoming")),
+        (
+            "remind me on 2026-09-30 at 5pm to do Open YouTube for CHEM",
+            ("add_event", "remind me on 2026-09-30 at 5pm to do Open YouTube for CHEM"),
+        ),
+        (
+            "I have Open YouTube for CHEM due on 2026-09-30",
+            ("add_event", "I have Open YouTube for CHEM due on 2026-09-30"),
+        ),
+        (
             "add event 2026-09-30 10:00 Open YouTube for CHEM",
             ("add_event", "2026-09-30 10:00 Open YouTube for CHEM"),
         ),

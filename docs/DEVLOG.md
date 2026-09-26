@@ -537,3 +537,29 @@ reported instead of being overwritten.
 
 Validation: `python3 tests/test_intent.py` and `python3 tests/test_schedule.py`
 passed. Schedule storage tests use temporary files and a fixed date.
+
+## Natural Schedule Commands
+
+Added natural phrases that use the existing local event storage and schedule views:
+
+```text
+remind me on 2026-09-30 at 5pm to do CHEM lab report
+remind me on 2026-09-30 to do CHEM lab report
+I have calculus homework due 2026-09-29
+I have CHEM lab due on 2026-09-30
+what do I have tomorrow
+what do I have today
+what's my schedule this week
+what's on my calendar
+show my schedule
+```
+
+Reminder times accept `5pm`, `5:00pm`, `17:00`, `9am`, and `9:30am` and save
+as `HH:MM`. Untimed events remain all-day. Titles keep their capitalization;
+the introductory `to do` is excluded from the saved reminder title. Schedule
+questions also accept curly apostrophes and trailing question marks.
+
+The original `add event`, list, and deletion commands are preserved. Invalid
+dates or times receive a message without saving an event. Updated routing and
+schedule storage tests pass using `python3 tests/test_intent.py` and
+`python3 tests/test_schedule.py`; storage tests use temporary data.

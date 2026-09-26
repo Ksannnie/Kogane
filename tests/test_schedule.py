@@ -105,6 +105,68 @@ def test_schedule_store():
                 assert schedule_file.read_text() == damaged
 
 
+def test_natural_schedule_events():
+    with TemporaryDirectory() as directory:
+        schedule_file = Path(directory) / "schedule.json"
+        with patch.object(schedule_store, "SCHEDULE_FILE", schedule_file):
+            for time_text, expected_time in [
+                ("5pm", "17:00"), ("5:00pm", "17:00"), ("17:00", "17:00"),
+                ("9am", "09:00"), ("9:30am", "09:30"),
+                ("12am", "00:00"), ("12pm", "12:00"), ("5 PM", "17:00"),
+            ]:
+                command = f"remind me on 2026-09-30 at {time_text} to do CHEM lab report"
+                expected = ("2026-09-30", expected_time, "CHEM lab report")
+                assert schedule_store.parse_natural_event(command) == expected, command
+                assert schedule_store.add_event(command)[0], command
+                saved = schedule_store.load_events()[-1]
+                assert (saved["date"], saved["time"], saved["title"]) == expected
+
+            for command, expected in [
+                (
+                    "remind me on 2026-09-30 to do CHEM lab report",
+                    ("2026-09-30", None, "CHEM lab report"),
+                ),
+                (
+                    "I have calculus homework due 2026-09-29",
+                    ("2026-09-29", None, "calculus homework"),
+                ),
+                (
+                    "I have CHEM lab due on 2026-09-30",
+                    ("2026-09-30", None, "CHEM lab"),
+                ),
+                (
+                    "I HAVE CHEM lab DUE ON 2026-09-30.",
+                    ("2026-09-30", None, "CHEM lab"),
+                ),
+                (
+                    "remind me on 2026-09-30 at 9am to Open YouTube for CHEM",
+                    ("2026-09-30", "09:00", "Open YouTube for CHEM"),
+                ),
+                (
+                    "I have 17:00 planning notes due 2026-09-30",
+                    ("2026-09-30", None, "17:00 planning notes"),
+                ),
+            ]:
+                assert schedule_store.add_event(command)[0], command
+                saved = schedule_store.load_events()[-1]
+                assert (saved["date"], saved["time"], saved["title"]) == expected
+
+            original = schedule_file.read_text()
+            for invalid in [
+                "remind me on 2026-02-30 at 5pm to do CHEM lab",
+                "I have CHEM lab due on 2026-02-30",
+                "remind me on 20260930 to do CHEM lab",
+                "remind me on 2026-09-30 at 5pm",
+                "remind me on 2026-09-30 to do",
+            ] + [
+                f"remind me on 2026-09-30 at {bad_time} to do CHEM lab"
+                for bad_time in ["13pm", "0am", "24:00", "9:99am", "5:7pm", "5"]
+            ]:
+                assert not schedule_store.add_event(invalid)[0], invalid
+                assert schedule_file.read_text() == original
+
+
 if __name__ == "__main__":
     test_schedule_store()
+    test_natural_schedule_events()
     print("All schedule tests passed.")

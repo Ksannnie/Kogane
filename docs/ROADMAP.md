@@ -139,6 +139,8 @@ In progress:
 * [x] Show upcoming, today, tomorrow, and next-seven-day schedules
 * [x] Delete events by their number in the displayed schedule
 * [x] Add schedule help and schedule tests
+* [x] Understand dated reminders, assignment due dates, and natural schedule questions
+* [x] Convert common reminder times such as `5pm` and `9:30am` to 24-hour times
 
 * [ ] Add website help
 * [ ] Add project-specific shortcuts

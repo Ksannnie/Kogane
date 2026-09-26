@@ -61,28 +61,93 @@ def save_events(events):
         temporary_file.unlink(missing_ok=True)
 
 
-def add_event(event_text):
-    parts = event_text.strip().split(maxsplit=1)
-    if len(parts) < 2:
-        return False, EVENT_USAGE
+def _normalize_natural_time(value):
+    value = value.strip().lower()
+    match = re.fullmatch(r"([0-9]{1,2})(?::([0-9]{2}))?\s*(am|pm)", value)
+    if match:
+        hour = int(match[1])
+        minute = int(match[2] or "0")
+        if 1 <= hour <= 12 and 0 <= minute <= 59:
+            hour = hour % 12 + (12 if match[3] == "pm" else 0)
+            return f"{hour:02d}:{minute:02d}"
+    else:
+        try:
+            _parse_time(value)
+            return value
+        except ValueError:
+            pass
+    raise ValueError("That time is not valid. Try 5pm, 9:30am, or 17:00.")
 
-    event_date, title = parts
+
+def parse_natural_event(event_text):
+    """Return (date, time, title) for a dated reminder/assignment, or None."""
+    text = event_text.strip()
+    reminder = re.fullmatch(
+        r"remind\s+me\s+on\s+(?P<date>\S+)"
+        r"(?:\s+at\s+(?P<time>.+?))?\s+to\s+(?P<title>.+)",
+        text,
+        re.IGNORECASE,
+    )
+    assignment = re.fullmatch(
+        r"i\s+have\s+(?P<title>.+?)\s+due(?:\s+on)?\s+"
+        r"(?P<date>[0-9]{4}-[0-9]{2}-[0-9]{2})[.!]?",
+        text,
+        re.IGNORECASE,
+    )
+    match = reminder or assignment
+    if match is None:
+        if re.match(r"remind\s+me\s+on(?:\s|$)", text, re.IGNORECASE):
+            raise ValueError("Try: remind me on YYYY-MM-DD [at 5pm] to do TITLE")
+        return None
+
+    event_date = match["date"]
     try:
         _parse_date(event_date)
-    except ValueError:
-        return False, "That date is not valid. Use YYYY-MM-DD."
+    except ValueError as error:
+        raise ValueError("That date is not valid. Use YYYY-MM-DD.") from error
 
     event_time = None
-    title_parts = title.split(maxsplit=1)
-    if re.match(r"^[0-9]+:", title_parts[0]):
-        event_time = title_parts[0]
-        try:
-            _parse_time(event_time)
-        except ValueError:
-            return False, "That time is not valid. Use HH:MM in 24-hour time."
-        if len(title_parts) < 2:
+    title = match["title"].strip()
+    if reminder:
+        if reminder["time"] is not None:
+            event_time = _normalize_natural_time(reminder["time"])
+        title = re.sub(r"^do(?:\s+|$)", "", title, count=1, flags=re.IGNORECASE).strip()
+    if not title:
+        raise ValueError("Please give the event a title.")
+    return event_date, event_time, title
+
+
+def add_event(event_text):
+    try:
+        natural_event = parse_natural_event(event_text)
+    except ValueError as error:
+        return False, str(error)
+
+    if natural_event is not None:
+        event_date, event_time, title = natural_event
+    else:
+        # Preserve the original explicit add-event syntax and validation.
+        parts = event_text.strip().split(maxsplit=1)
+        if len(parts) < 2:
             return False, EVENT_USAGE
-        title = title_parts[1]
+
+        event_date, title = parts
+        try:
+            _parse_date(event_date)
+        except ValueError:
+            return False, "That date is not valid. Use YYYY-MM-DD."
+
+        event_time = None
+        title_parts = title.split(maxsplit=1)
+        if re.match(r"^[0-9]+:", title_parts[0]):
+            event_time = title_parts[0]
+            try:
+                _parse_time(event_time)
+            except ValueError:
+                return False, "That time is not valid. Use HH:MM in 24-hour time."
+            if len(title_parts) < 2:
+                return False, EVENT_USAGE
+            title = title_parts[1]
 
     events = load_events()
     events.append({

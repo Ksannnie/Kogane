@@ -106,11 +106,18 @@ def show_schedule_help():
     kogane_speak("- schedule help / calendar help")
     kogane_speak("- add event YYYY-MM-DD HH:MM event title")
     kogane_speak("- add event YYYY-MM-DD event title (all day)")
+    kogane_speak("- remind me on 2026-09-30 at 5pm to do CHEM lab report")
+    kogane_speak("- remind me on 2026-09-30 to do CHEM lab report")
+    kogane_speak("- I have calculus homework due 2026-09-29")
+    kogane_speak("- I have CHEM lab due on 2026-09-30")
     kogane_speak("- schedule / calendar: today and later")
     kogane_speak("- today / tomorrow")
     kogane_speak("- this week: today and the next six days")
     kogane_speak("- delete event NUMBER: use the number in the last displayed list")
-    kogane_speak("Dates and 24-hour times use your computer's local time.")
+    kogane_speak("You can also ask: what do I have today / tomorrow, what's my schedule this week,")
+    kogane_speak("what's on my calendar, or show my schedule.")
+    kogane_speak("Reminder times accept 5pm, 5:00pm, 17:00, 9am, or 9:30am.")
+    kogane_speak("Dates and times use your computer's local time; reminders are saved events.")
 
 
 def show_schedule(view):

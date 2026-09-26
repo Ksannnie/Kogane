@@ -1,3 +1,6 @@
+import re
+
+
 def detect_intent(user_input):
     """Return the first matching intent and its data in routing priority order."""
     command = user_input.lower().strip()
@@ -66,6 +69,25 @@ def detect_intent(user_input):
 
     if command in ["today", "tomorrow", "this week"]:
         return "show_schedule", command
+
+    # Natural schedule questions tolerate apostrophe styles and punctuation.
+    schedule_question = command.replace("’", "'").rstrip("?.!").strip()
+    schedule_questions = {
+        "what do i have tomorrow": "tomorrow",
+        "what do i have today": "today",
+        "what's my schedule this week": "this week",
+        "what's on my calendar": "upcoming",
+        "show my schedule": "upcoming",
+    }
+    if schedule_question in schedule_questions:
+        return "show_schedule", schedule_questions[schedule_question]
+
+    # Keep dated reminders and assignments ahead of app/website matching.
+    if re.match(r"remind\s+me\s+on(?:\s|$)", command) or re.fullmatch(
+        r"i\s+have\s+.+\s+due(?:\s+on)?\s+[0-9]{4}-[0-9]{2}-[0-9]{2}[.!]?",
+        command,
+    ):
+        return "add_event", user_input.strip()
 
     # Workflow shortcuts
     workflow_commands = {
