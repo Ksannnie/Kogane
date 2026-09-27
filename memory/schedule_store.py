@@ -8,6 +8,11 @@ from pathlib import Path
 
 SCHEDULE_FILE = Path(__file__).parent / "schedule.json"
 EVENT_USAGE = "Try: add event YYYY-MM-DD [HH:MM] event title"
+WEEKDAYS = ("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
+DATE_PHRASE = (
+    r"(?:[0-9]{4}-[0-9]{2}-[0-9]{2}|today|tomorrow|"
+    r"(?:(?:this|next)\s+)?(?:" + "|".join(WEEKDAYS) + r"))"
+)
 
 
 def _parse_date(value):
@@ -79,47 +84,117 @@ def _normalize_natural_time(value):
     raise ValueError("That time is not valid. Try 5pm, 9:30am, or 17:00.")
 
 
-def parse_natural_event(event_text):
-    """Return (date, time, title) for a dated reminder/assignment, or None."""
-    text = event_text.strip()
-    reminder = re.fullmatch(
-        r"remind\s+me\s+on\s+(?P<date>\S+)"
-        r"(?:\s+at\s+(?P<time>.+?))?\s+to\s+(?P<title>.+)",
-        text,
-        re.IGNORECASE,
+def _resolve_event_date(value, event_time=None, now=None):
+    """Resolve relative dates locally; calendar weeks start on Monday."""
+    value = " ".join(value.lower().split())
+    now = now if now is not None else datetime.now()
+    today = now.date()
+    if value == "today":
+        return today.isoformat()
+    if value == "tomorrow":
+        return (today + timedelta(days=1)).isoformat()
+
+    words = value.split()
+    if words[-1] in WEEKDAYS:
+        weekday = WEEKDAYS.index(words[-1])
+        if words[0] in ["this", "next"] and len(words) == 2:
+            monday = today - timedelta(days=today.weekday())
+            days = weekday + (7 if words[0] == "next" else 0)
+            return (monday + timedelta(days=days)).isoformat()
+        if len(words) == 1:
+            days = (weekday - today.weekday()) % 7
+            if days == 0 and event_time is not None and _parse_time(event_time) < now.time():
+                days = 7
+            return (today + timedelta(days=days)).isoformat()
+    try:
+        return _parse_date(value).isoformat()
+    except ValueError as error:
+        raise ValueError("That date is not valid. Use YYYY-MM-DD, today, tomorrow, or a weekday.") from error
+
+
+def _match_natural_event(text):
+    """Share the command grammar between routing and parsing; no data is read."""
+    date_and_time = (
+        rf"(?P<date>{DATE_PHRASE})(?:\s+at\s+(?P<time>.+?))?"
+        r"(?:\s+(?P<week>next\s+week))?"
     )
-    assignment = re.fullmatch(
-        r"i\s+have\s+(?P<title>.+?)\s+due(?:\s+on)?\s+"
-        r"(?P<date>[0-9]{4}-[0-9]{2}-[0-9]{2})[.!]?",
-        text,
+    patterns = [
+        ("reminder", rf"remind\s+me(?:\s+on)?\s+{date_and_time}\s+to\s+(?P<title>.+)"),
+        (
+            "deadline_reminder",
+            rf"remind\s+me\s+(?P<title>.+?)(?:\s+is)?\s+due(?:\s+on)?\s+{date_and_time}[.!]?",
+        ),
+        ("assignment", rf"i\s+have\s+(?P<title>.+?)\s+due(?:\s+on)?\s+{date_and_time}[.!]?"),
+        (
+            "put",
+            rf"put\s+(?P<title>.+?)(?:\s+that['’]s)?\s+due(?:\s+on)?\s+"
+            rf"{date_and_time}\s+on\s+the\s+schedule[.!]?",
+        ),
+        ("add", rf"add\s+(?P<title>.+?)\s+due(?:\s+on)?\s+{date_and_time}[.!]?"),
+        ("schedule", rf"schedule\s+(?P<title>.+?)\s+for\s+{date_and_time}[.!]?"),
+        ("deadline", rf"(?P<title>.+?)(?:\s+is)?\s+due(?:\s+on)?\s+{date_and_time}[.!]?"),
+    ]
+    for kind, pattern in patterns:
+        # Bare deadline statements must not consume questions or other commands.
+        if kind == "deadline" and re.match(
+            r"(?:what|why|how|when|where|who|can|could|should|would|is|are|do|does|did|"
+            r"explain|tell|teach|open|launch|start|pull\s+up|search|remember|forget|delete|"
+            r"set\s+mode|remind\s+me|put|add|schedule|i\s+have|[0-9]{4}-[0-9]{2}-[0-9]{2}|"
+            r"(?:google|youtube|yt|github|git\s+hub)\s+search)\b",
+            text.strip(),
+            re.IGNORECASE,
+        ):
+            continue
+        match = re.fullmatch(pattern, text.strip(), re.IGNORECASE)
+        if match:
+            return kind, match
+    return None
+
+
+def _is_dated_reminder(text):
+    return re.match(
+        rf"remind\s+me\s+(?:on(?:\s|$)|{DATE_PHRASE}(?:\s|$))",
+        text.strip(),
         re.IGNORECASE,
-    )
-    match = reminder or assignment
-    if match is None:
-        if re.match(r"remind\s+me\s+on(?:\s|$)", text, re.IGNORECASE):
-            raise ValueError("Try: remind me on YYYY-MM-DD [at 5pm] to do TITLE")
+    ) is not None
+
+
+def is_natural_event_command(text):
+    return _match_natural_event(text) is not None or _is_dated_reminder(text)
+
+
+def parse_natural_event(event_text, now=None):
+    """Return (date, time, title), or None; optional now fixes the local clock."""
+    result = _match_natural_event(event_text)
+    if result is None:
+        if _is_dated_reminder(event_text):
+            raise ValueError("Try: remind me tomorrow at 5pm to do TITLE, or use YYYY-MM-DD.")
         return None
 
-    event_date = match["date"]
-    try:
-        _parse_date(event_date)
-    except ValueError as error:
-        raise ValueError("That date is not valid. Use YYYY-MM-DD.") from error
-
+    kind, match = result
     event_time = None
+    if match["time"] is not None:
+        event_time = _normalize_natural_time(match["time"])
+    date_phrase = " ".join(match["date"].lower().split())
+    if match["week"]:
+        if date_phrase in WEEKDAYS:
+            date_phrase = f"next {date_phrase}"
+        elif date_phrase not in [f"next {weekday}" for weekday in WEEKDAYS]:
+            raise ValueError("Use a weekday with 'next week', such as friday at 5pm next week.")
+    event_date = _resolve_event_date(date_phrase, event_time, now)
     title = match["title"].strip()
-    if reminder:
-        if reminder["time"] is not None:
-            event_time = _normalize_natural_time(reminder["time"])
+    if kind == "reminder":
         title = re.sub(r"^do(?:\s+|$)", "", title, count=1, flags=re.IGNORECASE).strip()
+    elif kind in ["put", "deadline_reminder", "deadline"]:
+        title = re.sub(r"^my\s+", "", title, count=1, flags=re.IGNORECASE).strip()
     if not title:
         raise ValueError("Please give the event a title.")
     return event_date, event_time, title
 
 
-def add_event(event_text):
+def add_event(event_text, now=None):
     try:
-        natural_event = parse_natural_event(event_text)
+        natural_event = parse_natural_event(event_text, now=now)
     except ValueError as error:
         return False, str(error)
 
@@ -154,10 +229,10 @@ def add_event(event_text):
         "date": event_date,
         "time": event_time,
         "title": title,
-        "created_at": datetime.now().isoformat(timespec="microseconds"),
+        "created_at": (now if now is not None else datetime.now()).isoformat(timespec="microseconds"),
     })
     save_events(events)
-    return True, f"Added event: {event_date} {event_time or 'All day'} - {title}"
+    return True, f"Added to schedule: {event_date} {event_time or 'All day'} — {title}"
 
 
 def _events_between(start_date, end_date=None):

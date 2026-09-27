@@ -110,13 +110,23 @@ def show_schedule_help():
     kogane_speak("- remind me on 2026-09-30 to do CHEM lab report")
     kogane_speak("- I have calculus homework due 2026-09-29")
     kogane_speak("- I have CHEM lab due on 2026-09-30")
+    kogane_speak("- put my homework that's due on friday at 5pm on the schedule")
+    kogane_speak("- add chem lab due tomorrow at 11:59pm")
+    kogane_speak("- schedule gym for tomorrow at 6pm")
+    kogane_speak("- remind me friday at 5pm to do homework")
+    kogane_speak("- remind me my homework is due on friday at 5pm next week")
+    kogane_speak("- chem lab is due tomorrow at 11:59pm")
+    kogane_speak("- I have a quiz due next monday at 8am")
     kogane_speak("- schedule / calendar: today and later")
     kogane_speak("- today / tomorrow")
     kogane_speak("- this week: today and the next six days")
     kogane_speak("- delete event NUMBER: use the number in the last displayed list")
     kogane_speak("You can also ask: what do I have today / tomorrow, what's my schedule this week,")
     kogane_speak("what's on my calendar, or show my schedule.")
-    kogane_speak("Reminder times accept 5pm, 5:00pm, 17:00, 9am, or 9:30am.")
+    kogane_speak("Times accept 5pm, 5:00pm, 11:59pm, 17:00, 9am, or 9:30am.")
+    kogane_speak("Event dates accept today, tomorrow, or any weekday, including this/next monday.")
+    kogane_speak("A bare weekday means the next occurrence; a passed time today moves it one week ahead.")
+    kogane_speak("This weekday means this Monday-Sunday week; next weekday means the following week.")
     kogane_speak("Dates and times use your computer's local time; reminders are saved events.")
 
 
@@ -150,7 +160,7 @@ def handle_schedule_command(intent, data):
             show_schedule(data)
         elif intent == "add_event":
             success, message = add_event(data)
-            kogane_speak(message)
+            kogane_speak(message if success else f"Event not saved: {message}")
             if success:
                 show_schedule("upcoming")
         elif intent == "delete_event":

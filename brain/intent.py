@@ -1,5 +1,7 @@
 import re
 
+from memory.schedule_store import is_natural_event_command
+
 
 def detect_intent(user_input):
     """Return the first matching intent and its data in routing priority order."""
@@ -70,23 +72,31 @@ def detect_intent(user_input):
     if command in ["today", "tomorrow", "this week"]:
         return "show_schedule", command
 
-    # Natural schedule questions tolerate apostrophe styles and punctuation.
-    schedule_question = command.replace("’", "'").rstrip("?.!").strip()
-    schedule_questions = {
-        "what do i have tomorrow": "tomorrow",
-        "what do i have today": "today",
-        "what's my schedule this week": "this week",
-        "what's on my calendar": "upcoming",
-        "show my schedule": "upcoming",
-    }
-    if schedule_question in schedule_questions:
-        return "show_schedule", schedule_questions[schedule_question]
+    # Schedule viewing uses local data, never AI, even with informal wording.
+    schedule_question = " ".join(command.replace("’", "'").rstrip("?.!").split())
+    schedule_question = re.sub(r"\bwhat(?:'s|s)\b", "what is", schedule_question)
+    schedule_periods = ["today", "tomorrow", "this week"]
+    for period in schedule_periods:
+        if schedule_question in [
+            f"what do i have {period}",
+            f"do i have anything {period}",
+            f"what is due {period}",
+        ]:
+            return "show_schedule", period
+
+    if re.match(
+        r"(?:what|when|where|who|why|how|which|do|does|is|are|am|can|could|would|will|"
+        r"show|list|tell|explain|display|check|please)\b",
+        schedule_question,
+    ) and re.search(r"\b(?:schedule|calendar|scheduled)\b", schedule_question):
+        periods = [
+            period for period in schedule_periods
+            if re.search(rf"\b{period}\b", schedule_question)
+        ]
+        return "show_schedule", periods[0] if len(periods) == 1 else "upcoming"
 
     # Keep dated reminders and assignments ahead of app/website matching.
-    if re.match(r"remind\s+me\s+on(?:\s|$)", command) or re.fullmatch(
-        r"i\s+have\s+.+\s+due(?:\s+on)?\s+[0-9]{4}-[0-9]{2}-[0-9]{2}[.!]?",
-        command,
-    ):
+    if is_natural_event_command(user_input):
         return "add_event", user_input.strip()
 
     # Workflow shortcuts

@@ -563,3 +563,35 @@ The original `add event`, list, and deletion commands are preserved. Invalid
 dates or times receive a message without saving an event. Updated routing and
 schedule storage tests pass using `python3 tests/test_intent.py` and
 `python3 tests/test_schedule.py`; storage tests use temporary data.
+
+## Relative Dates and Weekday Events
+
+Expanded the existing natural event parser with relative dates and these forms:
+
+```text
+put my homework that's due on friday at 5pm on the schedule
+put my homework due friday at 5pm on the schedule
+add homework due friday at 5pm
+add chem lab due tomorrow at 11:59pm
+schedule calculus study for monday at 3pm
+schedule gym for tomorrow at 6pm
+remind me friday at 5pm to do homework
+remind me tomorrow at 9am to do laundry
+I have a quiz due next monday at 8am
+```
+
+Dates use the local clock. A plain weekday means its next occurrence, including
+today if no time is supplied or its time has not passed. A passed time on the
+same weekday moves the event forward seven days. `this monday` refers to Monday
+of the current Monday–Sunday calendar week, even if it has passed; `next monday`
+refers to Monday of the following week. All seven weekday names work the same way.
+Explicit `today` stays today. The existing `this week` view still covers today
+and the next six days.
+
+Routing and parsing share one grammar. Titles retain capitalization while
+command wording such as `put my`, `that's due`, and `on the schedule` is removed.
+Existing exact-date, schedule-viewing, and deletion commands remain supported.
+
+Validation: intent and schedule tests passed, including a fixed-clock matrix
+for all weekdays, same-day time boundaries, midnight/noon, month/year rollover,
+and leap day. Storage tests use temporary data.

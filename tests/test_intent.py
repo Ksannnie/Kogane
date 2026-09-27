@@ -41,6 +41,10 @@ def test_intent_routing():
         ("add event", ("add_event", "")),
         ("delete event", ("delete_event", "")),
         (
+            "add event 2026-09-30 CHEM lab report due friday at 5pm",
+            ("add_event", "2026-09-30 CHEM lab report due friday at 5pm"),
+        ),
+        (
             "remind me on 2026-09-30 at 5pm to do CHEM lab report",
             ("add_event", "remind me on 2026-09-30 at 5pm to do CHEM lab report"),
         ),
@@ -62,6 +66,82 @@ def test_intent_routing():
         ("what’s my schedule this week?", ("show_schedule", "this week")),
         ("what's on my calendar", ("show_schedule", "upcoming")),
         ("show my schedule", ("show_schedule", "upcoming")),
+        ("whats on my schedule", ("show_schedule", "upcoming")),
+        ("what's on my schedule", ("show_schedule", "upcoming")),
+        ("what is on my schedule", ("show_schedule", "upcoming")),
+        ("what do I have scheduled", ("show_schedule", "upcoming")),
+        ("what do I have on my schedule", ("show_schedule", "upcoming")),
+        ("what do I have this week", ("show_schedule", "this week")),
+        ("do I have anything today", ("show_schedule", "today")),
+        ("do I have anything tomorrow", ("show_schedule", "tomorrow")),
+        ("show my calendar", ("show_schedule", "upcoming")),
+        ("whats on my calendar", ("show_schedule", "upcoming")),
+        ("  WHAT’S on my   schedule?  ", ("show_schedule", "upcoming")),
+        ("can you tell me about my schedule tomorrow?", ("show_schedule", "tomorrow")),
+        ("how does my schedule look tomorrow?", ("show_schedule", "tomorrow")),
+        ("please show my calendar this week", ("show_schedule", "this week")),
+        ("when is my next scheduled event?", ("show_schedule", "upcoming")),
+        (
+            "google search whats on my schedule",
+            ("search_website", ("google", "whats on my schedule")),
+        ),
+        (
+            "remind me my homework is due on friday at 5pm next week",
+            ("add_event", "remind me my homework is due on friday at 5pm next week"),
+        ),
+        (
+            "remind me my homework is due friday at 5pm next week",
+            ("add_event", "remind me my homework is due friday at 5pm next week"),
+        ),
+        ("homework due friday at 5pm", ("add_event", "homework due friday at 5pm")),
+        ("homework is due friday at 5pm", ("add_event", "homework is due friday at 5pm")),
+        (
+            "chem lab is due tomorrow at 11:59pm",
+            ("add_event", "chem lab is due tomorrow at 11:59pm"),
+        ),
+        (
+            "calculus homework is due next monday at 8am",
+            ("add_event", "calculus homework is due next monday at 8am"),
+        ),
+        ("what is due tomorrow", ("show_schedule", "tomorrow")),
+        (
+            "youtube search homework due friday at 5pm",
+            ("search_website", ("youtube", "homework due friday at 5pm")),
+        ),
+        (
+            "put my homework that's due on friday at 5pm on the schedule",
+            ("add_event", "put my homework that's due on friday at 5pm on the schedule"),
+        ),
+        (
+            "put my homework due friday at 5pm on the schedule",
+            ("add_event", "put my homework due friday at 5pm on the schedule"),
+        ),
+        ("add homework due friday at 5pm", ("add_event", "add homework due friday at 5pm")),
+        (
+            "add chem lab due tomorrow at 11:59pm",
+            ("add_event", "add chem lab due tomorrow at 11:59pm"),
+        ),
+        (
+            "schedule calculus study for monday at 3pm",
+            ("add_event", "schedule calculus study for monday at 3pm"),
+        ),
+        ("schedule gym for tomorrow at 6pm", ("add_event", "schedule gym for tomorrow at 6pm")),
+        (
+            "remind me friday at 5pm to do homework",
+            ("add_event", "remind me friday at 5pm to do homework"),
+        ),
+        (
+            "remind me tomorrow at 9am to do laundry",
+            ("add_event", "remind me tomorrow at 9am to do laundry"),
+        ),
+        (
+            "I have a quiz due next monday at 8am",
+            ("add_event", "I have a quiz due next monday at 8am"),
+        ),
+        (
+            "schedule Open YouTube for CHEM for this monday at 3pm",
+            ("add_event", "schedule Open YouTube for CHEM for this monday at 3pm"),
+        ),
         (
             "remind me on 2026-09-30 at 5pm to do Open YouTube for CHEM",
             ("add_event", "remind me on 2026-09-30 at 5pm to do Open YouTube for CHEM"),

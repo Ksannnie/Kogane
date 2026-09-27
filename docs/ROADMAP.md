@@ -141,6 +141,8 @@ In progress:
 * [x] Add schedule help and schedule tests
 * [x] Understand dated reminders, assignment due dates, and natural schedule questions
 * [x] Convert common reminder times such as `5pm` and `9:30am` to 24-hour times
+* [x] Resolve today, tomorrow, weekdays, and this/next weekday event dates
+* [x] Parse put/add/schedule phrases and test weekday time boundaries
 
 * [ ] Add website help
 * [ ] Add project-specific shortcuts
