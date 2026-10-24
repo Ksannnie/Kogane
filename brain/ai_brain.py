@@ -129,8 +129,22 @@ Rules:
         raw_response = response["message"]["content"]
         return clean_response(raw_response, current_mode)
 
-    except Exception:
+    except Exception as error:
+        error_text = str(error).lower()
+
+        if "timed out" in error_text or "timeout" in error_text:
+            return (
+                "My local AI took too long to respond, Kevin. Please try again in a moment. "
+                "I can still help with your local schedule and saved memories."
+            )
+
+        if "connection" in error_text or "refused" in error_text or "not found" in error_text or "unavailable" in error_text:
+            return (
+                "My local AI is unavailable right now, Kevin. I can still help with your saved "
+                "memories and local schedule while the AI service is offline."
+            )
+
         return (
-            "Hmm... my AI brain tripped for a second. "
+            "Hmm... my AI brain tripped for a second, Kevin. "
             "Make sure Ollama is open and the model is installed."
         )

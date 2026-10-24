@@ -276,7 +276,10 @@ def show_apps():
 
 def remember_memory(memory_text):
     success, message = remember_fact(memory_text)
-    kogane_speak(message)
+    if success:
+        kogane_speak(message)
+    else:
+        kogane_speak(f"I could not save that memory, Kevin: {message}")
 
 
 def show_memory():
@@ -416,10 +419,10 @@ while True:
         
     elif intent == "remember":
         remember_memory(data)
-        
+
     elif intent == "recall_memory":
         show_memory()
-  
+
     elif intent == "memory_count":
         show_memory_count()
 
@@ -432,7 +435,11 @@ while True:
 
     elif intent == "clear_memory":
         clear_memory()
-    
+
+    elif intent == "schedule_unknown":
+        kogane_speak("I could not understand that schedule question, Kevin.")
+        kogane_speak("Try asking for today, tomorrow, this week, or a specific date and time.")
+
     elif intent == "question":
         memories = get_facts()
         response = answer_question(data, user_name, current_mode, memories)

@@ -315,6 +315,61 @@ def detect_intent(user_input):
         if f" {folder_phrase} " in padded_command:
             return "open_folder", folder_key
 
+    memory_question_starters = [
+        "what do you remember",
+        "what do you remember about me",
+        "what do you know about me",
+        "what are my memories",
+        "what do you remember about kevin",
+        "tell me what you remember",
+        "tell me what you know about me",
+    ]
+
+    for memory_question in memory_question_starters:
+        if command == memory_question or command.startswith(memory_question + "?"):
+            return "recall_memory", None
+
+    if re.search(r"\b(?:schedule|calendar|reminder|homework|assignment|class|due|event|meeting|appointment|session|quiz)\b", command):
+        if any(word in command for word in ["next meeting", "upcoming meeting", "my meeting", "appointment", "session"]):
+            return "schedule_unknown", user_input
+
+        time_words = [
+            "today",
+            "tomorrow",
+            "this week",
+            "next week",
+            "monday",
+            "tuesday",
+            "wednesday",
+            "thursday",
+            "friday",
+            "saturday",
+            "sunday",
+        ]
+
+        if any(word in command for word in ["what do i have", "what's on my schedule", "what is on my schedule", "show my schedule", "show my calendar", "do i have anything", "what do i have today", "what do i have tomorrow", "what do i have this week", "what do you have today", "what do you have tomorrow", "what is due", "what is due today", "what is due tomorrow", "when is my next", "when is my", "do i have homework", "do i have any homework"]):
+            if "today" in command:
+                return "show_schedule", "today"
+            if "tomorrow" in command:
+                return "show_schedule", "tomorrow"
+            if "this week" in command:
+                return "show_schedule", "this week"
+            if "when is my next" in command and "meeting" not in command and "appointment" not in command:
+                return "show_schedule", "upcoming"
+            return "show_schedule", "upcoming"
+
+        if any(word in command for word in time_words):
+            period = "upcoming"
+            if "today" in command:
+                period = "today"
+            elif "tomorrow" in command:
+                period = "tomorrow"
+            elif "this week" in command:
+                period = "this week"
+            return "show_schedule", period
+
+        return "schedule_unknown", user_input
+
     # Question fallback
     question_starters = [
         "what",
