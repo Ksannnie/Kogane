@@ -35,6 +35,7 @@ from personality.responses import (
     get_question_response,
 )
 from voice.tts import VoiceManager
+from voice.speech_to_text import SpeechInputError, SpeechToText
 
 assistant_name = "Kogane"
 user_name = "Kevin"
@@ -42,6 +43,7 @@ current_mode = "introvert"
 displayed_schedule_events = None
 current_schedule_view = "upcoming"
 voice_manager = VoiceManager()
+speech_to_text = SpeechToText()
 
 
 def kogane_speak(message):
@@ -52,6 +54,7 @@ def kogane_speak(message):
 
 def show_voice_help():
     kogane_speak("Voice commands:")
+    kogane_speak("- voice listen (record one short command)")
     kogane_speak("- voice on")
     kogane_speak("- voice off")
     kogane_speak("- voice status")
@@ -349,6 +352,21 @@ startup_status()
 while True:
     user_input = input("Kevin: ")
     intent, data = detect_intent(user_input)
+
+    if intent == "voice_listen":
+        kogane_speak("Preparing local speech recognition.")
+        try:
+            user_input = speech_to_text.transcribe_once(
+                on_ready=lambda: kogane_speak("Microphone is ready. Speak now.")
+            )
+            print(f"Recognized: {user_input}")
+            intent, data = detect_intent(user_input)
+            if intent == "voice_listen":
+                kogane_speak("I will not start another recording from recognized speech.")
+                continue
+        except SpeechInputError as error:
+            kogane_speak(str(error))
+            continue
 
     if intent == "empty":
        kogane_speak(get_empty_response(user_name))

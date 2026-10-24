@@ -68,6 +68,9 @@ def detect_intent(user_input):
     if command in ["voice status", "voice", "status voice"]:
         return "voice_status", None
 
+    if command in ["voice listen", "listen", "push to talk"]:
+        return "voice_listen", None
+
     if command in ["schedule help", "calendar help"]:
         return "schedule_help", None
 

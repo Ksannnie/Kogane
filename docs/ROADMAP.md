@@ -74,14 +74,17 @@ This is functional when Ollama and a compatible model are available, but it is n
 
 ---
 
-## v0.5.0 - Voice ⏳
+## v0.5.0 - Voice ⚠️
 
-* [ ] Add speech-to-text
-* [ ] Add text-to-speech
+* [x] Add macOS text-to-speech with session-only opt-in
+* [x] Add explicit push-to-talk speech-to-text using Apple's on-device Speech framework
+* [x] Use macOS permission prompts and avoid storing raw audio
+* [x] Route recognized text through the existing command system
+* [x] Handle unavailable permission, microphone, local recognizer, and transcription errors
 * [ ] Add wake phrase activation
-* [ ] Add explicit user permission flow for microphones
-* [ ] Add voice-friendly responses and fallback behavior
-* [ ] Verify reliability in quiet and noisy environments
+* [ ] Verify microphone permissions and recognition quality in real quiet/noisy conditions
+
+The prototype uses Swift and Apple's Speech/AVFoundation frameworks already present on macOS. Speech recognition requires an available English on-device model and user-granted macOS permissions; automated tests mock capture and do not exercise the microphone.
 
 ---
 
