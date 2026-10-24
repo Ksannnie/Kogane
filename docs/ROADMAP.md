@@ -1,26 +1,22 @@
 # KOGANE Roadmap
 
-## Current Status
+## Current reality
 
-KOGANE is currently in early desktop assistant development.
+KOGANE is a real project with a working desktop assistant foundation and a long-term robotics and AI roadmap.
 
-Current phase: **v0.6.0 - Desktop Assistant**
+The current state should be treated as follows:
 
-Completed:
+- Verified and implemented: text command flow, personality modes, app/folder/website launching, JSON-based memory, schedule and reminder logic, intent routing, and schedule tests.
+- Runtime-dependent and not guaranteed in every environment: AI conversation through Ollama, local user data access, and desktop automation behavior.
+- Planned: voice, visual interface, camera vision, robot hardware, and autonomous flight.
 
-* v0.1.0 - Initialization
-* v0.2.0 - Text Command System
-* v0.3.0 - Memory
-* v0.4.0 - AI Brain
-* Core app, website, folder, and search commands
+---
 
-In progress:
+## Status legend
 
-* v0.6.0 - Desktop Assistant
-* Cleaner command routing
-* More project-specific shortcuts
-* Focused help menus
-* Portfolio-ready documentation
+- ✅ Verified in code and testable
+- ⚠️ Implemented but runtime-dependent or not fully validated in this environment
+- ⏳ Planned
 
 ---
 
@@ -29,199 +25,171 @@ In progress:
 * [x] Set up VS Code
 * [x] Set up Python
 * [x] Create project structure
-* [x] Create documentation files
+* [x] Create project documentation
 * [x] Create GitHub repository
-* [x] Push first version to GitHub
+* [x] Initialize local git workflow
 
 ---
 
 ## v0.2.0 - Text Command System ✅
 
-* [x] Add typed input
-* [x] Add help command
-* [x] Add status command
-* [x] Add mode command
-* [x] Add modes command
-* [x] Add greeting intent
+* [x] Add typed input loop
+* [x] Add help and status commands
 * [x] Add mode switching
+* [x] Add greeting and farewell behavior
 * [x] Add app launcher
 * [x] Add app list command
-* [x] Separate Roblox and Roblox Studio commands
-* [x] Fix FL Studio app alias
-* [x] Clean up unknown command responses
-* [x] Add more app shortcuts
-* [x] Test main command flow
+* [x] Add folder launching
+* [x] Add website launching and search
+* [x] Add intent routing for desktop commands
+* [x] Verify routing behavior through tests
 
 ---
 
-## v0.3.0 - Memory ✅
+## v0.3.0 - Memory ⚠️
 
-* [x] Create a memory file
-* [x] Save user memories
-* [x] Load memory when KOGANE starts
-* [x] Add a command to save information
-* [x] Add a command to recall saved information
-* [x] Confirm memory persists after restarting
-- [x] Clean up memory formatting
-- [x] Add better memory recall commands
-- [x] Add a way to delete specific memories
-- [x] Add a way to clear all memories
-- [x] Prevent duplicate memories
-- [x] Keep private memory files out of GitHub
+* [x] Create local JSON memory storage
+* [x] Add memory save and recall commands
+* [x] Add delete and clear-memory actions
+* [x] Prevent duplicate memory entries
+* [x] Keep personal memory files outside the codebase-level project scope
+* [ ] Add dedicated automated tests for all memory flows
+* [ ] Add stricter privacy controls for loaded memory use
+
+This subsystem is implemented and functions as a local personal data store, but it is not yet fully covered by a dedicated test file.
 
 ---
 
-## v0.4.0 - AI Brain 🚧
+## v0.4.0 - AI Brain ⚠️
 
-- [x] Create `brain/ai_brain.py`
-- [x] Detect open-ended questions
-- [x] Route open-ended questions to the AI brain file
-- [x] Connect KOGANE to an AI model
-- [x] Send user questions to the AI brain
-- [x] Return AI-generated answers
-- [x] Apply KOGANE's personality tone to AI responses
-- [x] Use memory context in AI answers
-- [ ] Add a fallback when the AI brain is unavailable
+* [x] Create `brain/ai_brain.py`
+* [x] Add question detection and routing
+* [x] Pass memory context into the prompt
+* [x] Apply mode-based personality instructions
+* [x] Use a local Ollama-compatible LLM backend
+* [ ] Add graceful fallback when the model or backend is unavailable
+* [ ] Add explicit offline-safe behavior when AI is disabled
+
+This is functional when Ollama and a compatible model are available, but it is not a fully offline guarantee and must be treated as runtime-dependent.
 
 ---
 
-## v0.5.0 - Voice
+## v0.5.0 - Voice ⏳
 
 * [ ] Add speech-to-text
 * [ ] Add text-to-speech
-* [ ] Add wake phrase: "Kogane"
-* [ ] Allow KOGANE to respond out loud
-* [ ] Add voice-friendly responses
-* [ ] Test voice input reliability
+* [ ] Add wake phrase activation
+* [ ] Add explicit user permission flow for microphones
+* [ ] Add voice-friendly responses and fallback behavior
+* [ ] Verify reliability in quiet and noisy environments
 
 ---
 
-## v0.6.0 - Desktop Assistant 🚧
+## v0.6.0 - Desktop Assistant ✅ / ⚠️
 
-* [x] Open apps
+### Verified desktop features
+
 * [x] Open apps from natural language
-* [x] Open Google Chrome
-* [x] Open Spotify
-* [x] Open FL Studio
-* [x] Open Roblox
-* [x] Open Roblox Studio
-* [x] Fix Roblox Studio path issue
-
-* [x] Open websites
 * [x] Open websites from natural language
-* [x] Open YouTube
-* [x] Open GitHub
-* [x] Open ChatGPT
-* [x] Open Canvas
-* [x] Open Google
-
-* [x] Search Google
-* [x] Search YouTube
-* [x] Search GitHub
-* [x] Add search help menu
-
-* [x] Open folders
-* [x] Open Downloads
-* [x] Open Documents
-* [x] Open Desktop
-* [x] Open KOGANE project folder
-* [x] Add folder help menu
-
+* [x] Search Google, YouTube, and GitHub
+* [x] Open documents, folders, and project directories
 * [x] Add focused help menus
-* [x] Add app help
-* [x] Add memory help
-* [x] Add mode help
-* [x] Add search help
-* [x] Add folder help
+* [x] Add schedule and reminder parsing
+* [x] Add date and weekday resolution logic
+* [x] Add schedule listing and deletion by displayed event number
+* [x] Add defensive handling for invalid or damaged schedule files
+* [x] Verify command routing and schedule behavior with automated tests
 
-* [x] Add a local schedule/calendar stored in JSON
-* [x] Add timed and all-day events with date/time validation
-* [x] Show upcoming, today, tomorrow, and next-seven-day schedules
-* [x] Delete events by their number in the displayed schedule
-* [x] Add schedule help and schedule tests
-* [x] Understand dated reminders, assignment due dates, and natural schedule questions
-* [x] Convert common reminder times such as `5pm` and `9:30am` to 24-hour times
-* [x] Resolve today, tomorrow, weekdays, and this/next weekday event dates
-* [x] Parse put/add/schedule phrases and test weekday time boundaries
+### Remaining work for this phase
 
-* [ ] Add website help
+* [ ] Add website help content for all routes
 * [ ] Add project-specific shortcuts
 * [ ] Add `open kogane repo`
 * [ ] Add `open canvas assignments`
 * [ ] Add `open odu email`
-* [ ] Add better error messages for failed launches
-* [ ] Clean up command routing in `brain/intent.py`
+* [ ] Improve error messages for failed launches
+* [ ] Clean up remaining routing edge cases
 
 ---
 
-## v0.7.0 - Vision
+## v0.7.0 - Vision ⏳
 
-* [ ] Add camera input
+* [ ] Add camera input with explicit permission flow
 * [ ] Describe what KOGANE sees
-* [ ] Add Watcher Mode behavior
-* [ ] Make camera comments occasional instead of annoying
-* [ ] Add privacy rules for camera use
-* [ ] Test image recognition features
+* [ ] Support Watcher Mode comments without constant interruption
+* [ ] Add privacy and revocation rules
+* [ ] Validate image recognition under real conditions
 
 ---
 
-## v0.8.0 - Interface
+## v0.8.0 - Interface ⏳
 
-* [ ] Add a simple visual interface
+* [ ] Add a simple graphical interface
 * [ ] Display current mode
 * [ ] Display command history
 * [ ] Display KOGANE status
-* [ ] Display saved memories
+* [ ] Display saved memories or memory status
 * [ ] Add basic visual personality elements
 
 ---
 
-## v0.9.0 - Physical Prototype
+## v0.9.0 - Physical Prototype ⏳
 
-* [ ] Sketch KOGANE body design
-* [ ] Choose rough body size
-* [ ] Order basic prototyping electronics
+* [ ] Sketch robot body concept
+* [ ] Define size and materials
 * [ ] Prototype OLED eyes
 * [ ] Prototype wing movement
 * [ ] Prototype tail movement
-* [ ] Add speaker
-* [ ] Add microphone
-* [ ] Design 3D-printable shell
-* [ ] Build first desk companion prototype
+* [ ] Add speaker and microphone hardware
+* [ ] Design a 3D-printable shell
+* [ ] Build the first desk companion prototype
 
 ---
 
-## v1.0.0 - First Stable Portfolio Release 🚧
+## v1.0.0 - Stable Desktop Assistant ⏳
 
-* [x] Project structure
-* [x] GitHub repository
-* [x] Text command system
-* [x] Personality modes
-* [x] Memory system
-* [x] AI question answering
-* [x] App launching
-* [x] Website launching
-* [x] Website search
-* [x] Folder launching
-* [x] Focused help menus
+### Acceptance criteria
 
-* [ ] Voice input
-* [ ] Voice output
-* [ ] Simple visual interface
-* [ ] Cleaner command routing
-* [ ] Complete documentation
-* [ ] Stable enough to show in a portfolio
+A stable desktop V1 should be considered ready only when all of the following are true:
+
+* [ ] The assistant can run reliably from a local Python environment without crashing during normal use
+* [ ] The command system remains stable and predictable across help, app, folder, website, memory, and schedule commands
+* [ ] The project includes automated tests covering routing and critical schedule logic
+* [ ] Local personal memory and calendar data are stored safely and are never overwritten by AI responses
+* [ ] The user can explicitly enable or disable AI features, voice features, scheduling features, and camera features
+* [ ] The documentation explains supported features, limits, and privacy boundaries
+* [ ] The project is stable enough to demonstrate to a user without broken workflows
+
+### Required work before V1
+
+* [ ] Full routing cleanup and known-edge-case review
+* [ ] Offline-safe behavior when AI services are unavailable
+* [ ] Clear user-facing error handling for failed desktop automation
+* [ ] Memory and schedule operations with privacy-safe defaults
+* [ ] Documentation reviewed against actual verified behavior
 
 ---
 
-## Long-Term Vision
+## Long-term vision
 
-The long-term goal is to turn KOGANE into a personalized AI companion that can:
+KOGANE should evolve toward a personalized AI companion that can:
 
-* Respond to typed and spoken commands
-* Answer open-ended questions like an AI assistant
-* Speak in KOGANE's own personality and tone
-* Remember useful information about the user
-* Open apps and assist with desktop workflows
-* Use camera vision through Watcher Mode
-* Eventually connect to a physical robotic companion body
+* respond to typed and spoken commands
+* answer open-ended questions using a private local AI backend
+* remember useful information safely and deterministically
+* open apps, websites, and workflows on the user's desktop
+* manage schedule, reminders, and due dates naturally
+* work as a desktop assistant even without robot hardware
+* eventually operate as a robot companion with expressive motion and speech
+* eventually support a flight-capable simulation-first platform with clear safety boundaries
+
+### Flight development rule
+
+Future autonomous flight is a separate and highly constrained subsystem.
+
+- It must be developed in simulation first.
+- It must not be directly controlled by a language model.
+- It must include a dedicated flight controller, independent fail-safes, manual override, and emergency landing logic.
+- It must not be treated as part of the conversational AI layer.
+
+---
