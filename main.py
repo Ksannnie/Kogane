@@ -34,16 +34,45 @@ from personality.responses import (
     get_unknown_response,
     get_question_response,
 )
+from voice.tts import VoiceManager
 
 assistant_name = "Kogane"
 user_name = "Kevin"
 current_mode = "introvert"
 displayed_schedule_events = None
 current_schedule_view = "upcoming"
+voice_manager = VoiceManager()
 
 
 def kogane_speak(message):
     print(f"{assistant_name}: {message}")
+    if voice_manager.status() == "on":
+        voice_manager.speak(message)
+
+
+def show_voice_help():
+    kogane_speak("Voice commands:")
+    kogane_speak("- voice on")
+    kogane_speak("- voice off")
+    kogane_speak("- voice status")
+    kogane_speak("- voice help")
+
+
+def show_voice_status():
+    if voice_manager.status() == "on":
+        kogane_speak("Voice is currently on.")
+    else:
+        kogane_speak("Voice is currently off.")
+
+
+def enable_voice():
+    voice_manager.enable()
+    kogane_speak("Voice output enabled.")
+
+
+def disable_voice():
+    voice_manager.disable()
+    kogane_speak("Voice output disabled.")
 
 
 def startup_status():
@@ -351,6 +380,18 @@ while True:
 
     elif intent == "mode_help":
         show_mode_help()
+
+    elif intent == "voice_help":
+        show_voice_help()
+
+    elif intent == "voice_on":
+        enable_voice()
+
+    elif intent == "voice_off":
+        disable_voice()
+
+    elif intent == "voice_status":
+        show_voice_status()
 
     elif intent == "search_help":
         show_search_help()

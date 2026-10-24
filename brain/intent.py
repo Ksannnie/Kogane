@@ -56,6 +56,18 @@ def detect_intent(user_input):
     if command in ["mode help", "modes help"]:
         return "mode_help", None
 
+    if command in ["voice help", "voice commands", "tts help"]:
+        return "voice_help", None
+
+    if command in ["voice on", "enable voice", "turn voice on"]:
+        return "voice_on", None
+
+    if command in ["voice off", "disable voice", "turn voice off"]:
+        return "voice_off", None
+
+    if command in ["voice status", "voice", "status voice"]:
+        return "voice_status", None
+
     if command in ["schedule help", "calendar help"]:
         return "schedule_help", None
 
